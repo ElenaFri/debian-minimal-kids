@@ -1,0 +1,39 @@
+# Generated Debian live-build artifacts
+*.iso
+*.img
+*.img.gz
+*.hybrid.iso
+*.contents
+*.packages
+*.buildlog
+*.chroot
+*.binary
+*.build
+*.cache/
+
+# Downloaded packages and generated filesystem
+cache/
+chroot/
+binary/
+*.deb
+
+# Temporary build files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor and IDE files
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
