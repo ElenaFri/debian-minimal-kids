@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# =============================================================================
+# Configuration reproductible de debian-minimal-kids
+# -----------------------------------------------------------------------------
+# Ce script fige toutes les options de « lb config ».
+# Il est executé automatiquement par « lb build », ce qui garantit une
+# construction identique a chaque fois, a partir du depot Git uniquement.
+#
+# Pour (re)generer l'arborescence config/ a la main :  lb config
+# =============================================================================
+
+set -e
+
+lb config noauto \
+    --mode debian \
+    --distribution trixie \
+    --architectures amd64 \
+    --archive-areas "main contrib non-free non-free-firmware" \
+    --debian-installer live \
+    --bootappend-live "boot=live components quiet splash live-config.username=lisa live-config.user-fullname=Lisa live-config.hostname=kids-pc live-config.locales=fr_FR.UTF-8 live-config.keyboard-layouts=fr live-config.timezone=Europe/Paris" \
+    --bootappend-install "locale=fr_FR.UTF-8 keymap=fr" \
+    --image-name "debian-minimal-kids" \
+    --iso-application "Debian Minimal Kids" \
+    --iso-volume "debian-minimal-kids" \
+    --iso-publisher "debian-minimal-kids project" \
+    "${@}"

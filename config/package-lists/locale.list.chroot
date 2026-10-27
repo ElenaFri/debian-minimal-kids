@@ -1,0 +1,10 @@
+# -----------------------------------------------------------------------------
+# Localisation : français par défaut (langue + clavier)
+# -----------------------------------------------------------------------------
+# Ces paquets permettent à live-config de générer la locale fr_FR.UTF-8 et de
+# configurer le clavier AZERTY au démarrage (voir les paramètres
+# live-config.locales / live-config.keyboard-layouts dans auto/config).
+
+locales
+console-setup
+keyboard-configuration

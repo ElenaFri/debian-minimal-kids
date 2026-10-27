@@ -1,0 +1,27 @@
+# -----------------------------------------------------------------------------
+# Environnement de bureau XFCE
+# -----------------------------------------------------------------------------
+# Objectif : un bureau FONCTIONNEL, mais SANS aucune application utilisateur.
+# (Les navigateurs, logiciels éducatifs, jeux, etc. seront ajoutés plus tard.)
+#
+# Les lignes commençant par « # » sont ignorées par live-build.
+
+# --- Serveur d'affichage X ---
+xorg
+
+# --- Bureau XFCE : noyau uniquement ---
+# Le métapaquet « xfce4 » fournit le gestionnaire de fenêtres (xfwm4), le
+# tableau de bord, le bureau, le gestionnaire de paramètres, la session et
+# Thunar. On n'inclut PAS « xfce4-goodies » (qui apporterait des applications).
+xfce4
+dbus-x11
+
+# --- Connexion graphique + autologin de l'utilisateur « lisa » ---
+lightdm
+lightdm-gtk-greeter
+
+# --- Infrastructure (pas des applications, mais indispensable à un bureau
+#     réellement utilisable : réseau et son) ---
+network-manager-gnome
+pipewire-audio
+wireplumber

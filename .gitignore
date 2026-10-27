@@ -1,21 +1,34 @@
 # Generated Debian live-build artifacts
+# NOTE : ne PAS ignorer *.chroot ni *.binary — ce sont les suffixes des fichiers
+# SOURCES de live-build (listes de paquets, hooks), pas des artefacts de build.
+.build/
 *.iso
+*.hybrid.iso
 *.img
 *.img.gz
-*.hybrid.iso
-*.contents
-*.packages
 *.buildlog
-*.chroot
-*.binary
-*.build
-*.cache/
+*.contents
+*.files
+*.packages
+chroot.packages.*
+binary.modified_timestamps
+live-image-*
+wget-log*
+
+# Hooks par défaut de live-build : liens recréés à chaque build vers
+# /usr/share/live/build/hooks/, à ne PAS versionner.
+# Pour versionner VOS propres hooks : git add -f config/hooks/.../mon-hook.hook.chroot
+config/hooks/live/
+config/hooks/normal/
 
 # Downloaded packages and generated filesystem
 cache/
 chroot/
 binary/
 *.deb
+
+# VM test disks
+*.qcow2
 
 # Temporary build files
 tmp/
