@@ -10,10 +10,10 @@ LB_BINARY_FILESYSTEM="fat32"
 LB_APT_INDICES="true"
 
 # Set boot parameters
-LB_BOOTAPPEND_LIVE="boot=live components quiet splash"
+LB_BOOTAPPEND_LIVE="boot=live components quiet splash live-config.username=lisa live-config.user-fullname=Lisa live-config.hostname=kids-pc live-config.locales=fr_FR.UTF-8 live-config.keyboard-layouts=fr live-config.timezone=Europe/Paris"
 
 # Set boot parameters
-LB_BOOTAPPEND_INSTALL=""
+LB_BOOTAPPEND_INSTALL="locale=fr_FR.UTF-8 keymap=fr"
 
 # Set boot parameters
 LB_BOOTAPPEND_LIVE_FAILSAFE="boot=live components memtest noapic noapm nodma nomce nosmp nosplash vga=788"
@@ -71,16 +71,16 @@ LB_HDD_SIZE="auto"
 LB_HDD_PARTITION_START=""
 
 # Set iso author
-LB_ISO_APPLICATION="Debian Live"
+LB_ISO_APPLICATION="Debian Minimal Kids"
 
 # Set iso preparer
 LB_ISO_PREPARER="live-build @LB_VERSION@; https://salsa.debian.org/live-team/live-build"
 
 # Set iso publisher
-LB_ISO_PUBLISHER="Debian Live project; https://wiki.debian.org/DebianLive; debian-live@lists.debian.org"
+LB_ISO_PUBLISHER="debian-minimal-kids project"
 
 # Set iso volume (max 32 chars)
-LB_ISO_VOLUME="Debian trixie @ISOVOLUME_TS@"
+LB_ISO_VOLUME="debian-minimal-kids"
 
 # Set jffs2 eraseblock size
 LB_JFFS2_ERASEBLOCK=""

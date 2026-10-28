@@ -8,9 +8,9 @@ Construit avec [`live-build`](https://wiki.debian.org/DebianLive) à partir de
 **Debian 13 « trixie »** (stable).
 
 > État actuel : **base Debian fonctionnelle avec bureau XFCE**, en **français**,
-> mais **sans aucune application utilisateur**. Les logiciels (navigateur,
-> éducatif, jeux...) seront ajoutés plus tard, au fur et à mesure des choix du
-> projet.
+> avec un ensemble d'applications et de jeux (essentiellement GTK) en cours de
+> constitution. Les logiciels sont ajoutés un par un, au fur et à mesure des
+> choix du projet.
 
 ## Prérequis
 
@@ -67,6 +67,16 @@ qemu-system-x86_64 -enable-kvm -m 2048 -smp 2 \
 Choisissez l'entrée **Install** du menu de démarrage. Une fois l'installation
 terminée, relancez **sans `-cdrom`** pour démarrer le système installé.
 
+## Scratch (via Flatpak)
+
+Scratch n'est pas packagé dans Debian. Il est installé depuis Flathub pendant le
+build par le hook `config/hooks/normal/0500-flatpak-scratch.hook.chroot` (le
+paquet `flatpak` est déclaré dans `apps.list.chroot`).
+
+> Contrepartie : Scratch tire un runtime GNOME volumineux (plusieurs centaines de
+> Mo), ce qui **augmente la taille de l'ISO**. Les performances à l'usage restent
+> correctes.
+
 ## Structure du projet
 
 | Chemin | Rôle |
@@ -75,8 +85,10 @@ terminée, relancez **sans `-cdrom`** pour démarrer le système installé.
 | `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
 | `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
 | `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) |
+| `config/package-lists/apps.list.chroot` | Applications (ajoutées au fur et à mesure) |
+| `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
-| `config/hooks/` | Scripts de personnalisation (à venir) |
+| `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
 | `config/includes.chroot_*/` | Fichiers à injecter dans le système (à venir) |
 | `build.sh` / `clean.sh` | Scripts pratiques |
 
@@ -101,8 +113,8 @@ disque) : langue, clavier AZERTY et fuseau Europe/Paris sont préconfigurés via
 
 Quand le moment sera venu d'étoffer la distribution :
 
-- **Applications** : créer des listes dans `config/package-lists/`
-  (une liste par thème, p. ex. `education.list.chroot`, `jeux.list.chroot`).
+- **Applications** : les ajouter dans `config/package-lists/apps.list.chroot`,
+  ou créer des listes thématiques (p. ex. `education.list.chroot`).
 - **Réglages, thème, fond d'écran** : déposer les fichiers dans
   `config/includes.chroot_after_packages/`.
 - **Personnalisation au démarrage, verrouillage parental** : ajouter des scripts

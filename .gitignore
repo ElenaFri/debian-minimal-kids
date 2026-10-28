@@ -2,6 +2,7 @@
 # NOTE : ne PAS ignorer *.chroot ni *.binary — ce sont les suffixes des fichiers
 # SOURCES de live-build (listes de paquets, hooks), pas des artefacts de build.
 .build/
+.lock
 *.iso
 *.hybrid.iso
 *.img
@@ -15,11 +16,24 @@ binary.modified_timestamps
 live-image-*
 wget-log*
 
+# Fichiers de config générés par « lb config » (recréés depuis auto/config).
+# On versionne auto/config et nos ajouts (package-lists, hooks, includes...),
+# pas ces fichiers d'état régénérés à chaque build.
+config/binary
+config/bootstrap
+config/chroot
+config/common
+config/source
+
 # Hooks par défaut de live-build : liens recréés à chaque build vers
 # /usr/share/live/build/hooks/, à ne PAS versionner.
-# Pour versionner VOS propres hooks : git add -f config/hooks/.../mon-hook.hook.chroot
-config/hooks/live/
-config/hooks/normal/
+# On ignore le CONTENU des dossiers (/*) pour pouvoir ré-inclure nos propres
+# hooks ci-dessous avec « ! ».
+config/hooks/live/*
+config/hooks/normal/*
+
+# Nos hooks personnalisés (à versionner)
+!config/hooks/normal/0500-flatpak-scratch.hook.chroot
 
 # Downloaded packages and generated filesystem
 cache/
