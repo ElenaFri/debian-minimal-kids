@@ -1,0 +1,54 @@
+#!/bin/sh
+# kids-set-wallpaper — applique le fond d'écran par défaut sur chaque moniteur.
+#
+# Lancé une fois par session via l'autostart XFCE. xfdesktop 4.20 range le fond
+# sous une clé xfconf qui dépend du nom du connecteur réel du moniteur
+# (ex. Virtual-1 en QEMU, eDP-1 / HDMI-1 sur du matériel), que l'on ne peut pas
+# figer dans un XML. On détecte donc les moniteurs connectés au démarrage.
+#
+# Le fond n'est posé que si l'utilisateur n'en a pas déjà choisi un, afin que les
+# changements manuels soient conservés sur un système installé. Sur le live, le
+# dossier /etc/skel est recopié à chaque démarrage, donc le fond est toujours là.
+
+WALLPAPER="/usr/share/backgrounds/debian-minimal-kids/wallpaper.jpg"
+
+[ -r "$WALLPAPER" ] || exit 0
+command -v xfconf-query >/dev/null 2>&1 || exit 0
+
+# Noms des connecteurs RANDR des sorties actives (identiques à ceux qu'utilise
+# xfdesktop pour construire la clé xfconf).
+monitors=""
+if command -v xrandr >/dev/null 2>&1; then
+    monitors="$(xrandr --listmonitors 2>/dev/null | awk 'NR>1 {print $NF}')"
+fi
+
+# Repli : déduire les connecteurs depuis le sysfs DRM si xrandr est absent.
+if [ -z "$monitors" ]; then
+    for status in /sys/class/drm/*/status; do
+        [ -r "$status" ] || continue
+        [ "$(cat "$status")" = "connected" ] || continue
+        name="${status%/status}"   # /sys/class/drm/card0-Virtual-1
+        name="${name##*/}"         # card0-Virtual-1
+        name="${name#*-}"          # Virtual-1  (retire le préfixe « cardN- »)
+        monitors="$monitors $name"
+    done
+fi
+
+[ -n "$monitors" ] || exit 0
+
+for mon in $monitors; do
+    base="/backdrop/screen0/monitor${mon}/workspace0"
+
+    # Ne rien faire si un fond a déjà été configuré pour ce moniteur.
+    if xfconf-query -c xfce4-desktop -p "${base}/last-image" >/dev/null 2>&1; then
+        continue
+    fi
+
+    # image-style=5 (ZOOMED : remplit l'écran en gardant les proportions),
+    # color-style=3 (TRANSPARENT : pas de couleur peinte, l'image suffit).
+    xfconf-query -c xfce4-desktop -p "${base}/last-image"  -n -t string -s "$WALLPAPER"
+    xfconf-query -c xfce4-desktop -p "${base}/image-style" -n -t int    -s 5
+    xfconf-query -c xfce4-desktop -p "${base}/color-style" -n -t int    -s 3
+done
+
+exit 0

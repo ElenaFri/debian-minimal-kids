@@ -6,3 +6,6 @@ lightdm-gtk-greeter
 network-manager-gnome
 pipewire-audio
 wireplumber
+x11-xserver-utils
+arc-theme
+elementary-xfce-icon-theme

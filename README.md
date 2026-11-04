@@ -87,14 +87,51 @@ Le bureau livré par défaut est défini dans
 - un **dock vertical à gauche** (48 px), centré, **transparent** et **ajusté à
   la taille de ses icônes**, avec six lanceurs, dans l'ordre : Firefox, Gedit,
   Scratch, Dessin, VLC, Thunar ;
-- un **bureau sans icônes** (fond d'écran seul).
+- un **bureau sans icônes** (fond d'écran seul) ;
+- un **thème clair et chaleureux** : GTK et bordures de fenêtres **Arc-Lighter**
+  (paquet `arc-theme`), icônes **elementary-xfce** (paquet
+  `elementary-xfce-icon-theme`) ;
+- un **fond d'écran** doux (un chat endormi à la bougie), installé dans
+  `/usr/share/backgrounds/debian-minimal-kids/wallpaper.jpg`.
 
 La disposition des panneaux est décrite dans `xfce4-panel.xml`. Chaque lanceur
 du dock a son fichier `.desktop` dans un sous-dossier dédié `panel/launcher-<id>/`
 (le numéro `<id>` correspond au plugin dans `xfce4-panel.xml`, c'est l'endroit où
 le panneau XFCE va chercher ses lanceurs). Le masquage des icônes du bureau est
-réglé dans `xfce4-desktop.xml`, et la transparence du dock nécessite le
-compositeur, activé dans `xfwm4.xml`.
+réglé dans `xfce4-desktop.xml`, le thème GTK et les icônes dans `xsettings.xml`,
+le thème des fenêtres dans `xfwm4.xml` (qui active aussi le compositeur
+nécessaire à la transparence du dock).
+
+Le **fond d'écran** mérite une explication. xfdesktop 4.20 range le fond choisi
+sous une clé xfconf qui dépend du nom du connecteur réel du moniteur (`Virtual-1`
+en QEMU, `eDP-1`/`HDMI-1` sur du matériel), impossible à figer dans un XML. Et
+quand aucune image n'est définie, xfdesktop affiche son **image par défaut**
+compilée, `DEFAULT_BACKDROP` = `/usr/share/backgrounds/xfce/xfce-x.svg` (fournie
+par le paquet `xfdesktop4-data`), avec les styles par défaut *zoomé* +
+*transparent*.
+
+On s'appuie sur ce comportement, de deux façons complémentaires :
+
+1. **Image par défaut remplacée** (mécanisme principal, infaillible) :
+   `/usr/share/backgrounds/xfce/xfce-x.svg` est un **lien symbolique** vers notre
+   image (`usr/share/backgrounds/xfce/xfce-x.svg` → `../debian-minimal-kids/wallpaper.jpg`).
+   Dès lors, sans aucune clé xfconf ni course au démarrage, le bureau affiche
+   notre chat — sur tous les moniteurs et toutes les résolutions (xfdesktop le
+   charge par son contenu, l'extension `.svg` est sans importance). Le fond
+   remplit l'écran en gardant les proportions (style *zoomé* par défaut).
+2. **Script d'ouverture de session** (complément) :
+   `/usr/local/bin/kids-set-wallpaper`, lancé via
+   `~/.config/autostart/kids-set-wallpaper.desktop`, détecte les moniteurs
+   connectés et pose explicitement la clé `last-image`. Intérêt : le choix est
+   reflété dans l'outil « Bureau » de XFCE et **survit à une mise à jour** du
+   paquet `xfdesktop4-data` (qui restaurerait sinon `xfce-x.svg`). Le script ne
+   touche à rien si un fond a déjà été choisi, pour conserver les changements
+   manuels sur un système installé (le mode « même fond sur tous les bureaux »
+   est réglé dans `xfce4-desktop.xml`).
+
+Le thème GTK et les icônes sont réglés dans `xsettings.xml`, le thème des
+fenêtres dans `xfwm4.xml` (qui active aussi le compositeur nécessaire à la
+transparence du dock), le masquage des icônes du bureau dans `xfce4-desktop.xml`.
 
 Ces fichiers sont déposés dans `/etc/skel` : chaque nouvelle session — le live
 comme un système fraîchement installé — hérite du même bureau. Pour ajuster le
@@ -108,12 +145,15 @@ live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
 | `auto/config` | Options de `lb config` figées => **build reproductible** (langue, clavier, utilisateur...) |
 | `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
 | `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
-| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) |
+| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Arc-Lighter, icônes elementary-xfce) |
 | `config/package-lists/apps.list.chroot` | Applications (ajoutées au fur et à mesure) |
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
 | `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
-| `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs) |
+| `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs, thème, autostart) |
+| `config/includes.chroot_after_packages/usr/share/backgrounds/debian-minimal-kids/` | Fond d'écran par défaut |
+| `config/includes.chroot_after_packages/usr/share/backgrounds/xfce/xfce-x.svg` | Lien vers notre fond : remplace l'image par défaut de xfdesktop |
+| `config/includes.chroot_after_packages/usr/local/bin/kids-set-wallpaper` | Pose `last-image` sur chaque moniteur à l'ouverture de session (complément) |
 | `build.sh` / `clean.sh` | Scripts pratiques |
 
 ## Réglages par défaut
@@ -139,7 +179,8 @@ Quand le moment sera venu d'étoffer la distribution :
 
 - **Applications** : les ajouter dans `config/package-lists/apps.list.chroot`,
   ou créer des listes thématiques (p. ex. `education.list.chroot`).
-- **Réglages, thème, fond d'écran** : déposer les fichiers dans
-  `config/includes.chroot_after_packages/`.
+- **Réglages, thème, fond d'écran** : déposer ou modifier les fichiers dans
+  `config/includes.chroot_after_packages/` (le thème clair et le fond d'écran y
+  sont déjà en place, voir la section « Bureau XFCE par défaut »).
 - **Personnalisation au démarrage, verrouillage parental** : ajouter des scripts
   dans `config/hooks/normal/`.

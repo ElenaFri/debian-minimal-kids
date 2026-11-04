@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Fond d'écran par défaut
+Name[en]=Default wallpaper
+Comment=Applique le fond d'écran des enfants sur chaque moniteur
+Exec=sh /usr/local/bin/kids-set-wallpaper
+OnlyShowIn=XFCE;
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
