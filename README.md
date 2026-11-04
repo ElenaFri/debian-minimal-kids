@@ -4,6 +4,8 @@ Un système GNU/Linux minimaliste basé sur Debian, pensé pour les enfants :
 simplicité, autonomie et informatique intentionnelle. Moins de superflu, plus
 d'exploration.
 
+![Default desktop](screenshots/default_desktop.png)
+
 Construit avec [`live-build`](https://wiki.debian.org/DebianLive) à partir de
 **Debian 13 « trixie »** (stable).
 
@@ -88,8 +90,8 @@ Le bureau livré par défaut est défini dans
   la taille de ses icônes**, avec six lanceurs, dans l'ordre : Firefox, Gedit,
   Scratch, Dessin, VLC, Thunar ;
 - un **bureau sans icônes** (fond d'écran seul) ;
-- un **thème clair et chaleureux** : GTK et bordures de fenêtres **Arc-Lighter**
-  (paquet `arc-theme`), icônes **elementary-xfce** (paquet
+- un **thème clair et chaleureux** : GTK et bordures de fenêtres **Yaru**
+  (accent orange, paquet `yaru-theme-gtk`), icônes **elementary-xfce** (paquet
   `elementary-xfce-icon-theme`) ;
 - un **fond d'écran** doux (un chat endormi à la bougie), installé dans
   `/usr/share/backgrounds/debian-minimal-kids/wallpaper.jpg`.
@@ -145,7 +147,7 @@ live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
 | `auto/config` | Options de `lb config` figées => **build reproductible** (langue, clavier, utilisateur...) |
 | `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
 | `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
-| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Arc-Lighter, icônes elementary-xfce) |
+| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Yaru, icônes elementary-xfce) |
 | `config/package-lists/apps.list.chroot` | Applications (ajoutées au fur et à mesure) |
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
