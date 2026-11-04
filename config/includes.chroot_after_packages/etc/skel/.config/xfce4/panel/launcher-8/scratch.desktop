@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Scratch
+Comment=Créer des histoires, des jeux et des animations
+Exec=flatpak run edu.mit.Scratch
+Icon=edu.mit.Scratch
+Terminal=false
+Categories=Education;Development;

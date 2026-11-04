@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=VLC
+Comment=Lecteur multimédia
+Exec=vlc
+Icon=vlc
+Terminal=false
+Categories=AudioVideo;

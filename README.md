@@ -77,11 +77,35 @@ paquet `flatpak` est déclaré dans `apps.list.chroot`).
 > Mo), ce qui **augmente la taille de l'ISO**. Les performances à l'usage restent
 > correctes.
 
+## Bureau XFCE par défaut
+
+Le bureau livré par défaut est défini dans
+`config/includes.chroot_after_packages/etc/skel/.config/xfce4/` :
+
+- un **panneau horizontal en bas** (36 px) : menu des applications, bureaux,
+  liste des fenêtres, zone de notification, horloge ;
+- un **dock vertical à gauche** (48 px), centré, **transparent** et **ajusté à
+  la taille de ses icônes**, avec six lanceurs, dans l'ordre : Firefox, Gedit,
+  Scratch, Dessin, VLC, Thunar ;
+- un **bureau sans icônes** (fond d'écran seul).
+
+La disposition des panneaux est décrite dans `xfce4-panel.xml`. Chaque lanceur
+du dock a son fichier `.desktop` dans un sous-dossier dédié `panel/launcher-<id>/`
+(le numéro `<id>` correspond au plugin dans `xfce4-panel.xml`, c'est l'endroit où
+le panneau XFCE va chercher ses lanceurs). Le masquage des icônes du bureau est
+réglé dans `xfce4-desktop.xml`, et la transparence du dock nécessite le
+compositeur, activé dans `xfwm4.xml`.
+
+Ces fichiers sont déposés dans `/etc/skel` : chaque nouvelle session — le live
+comme un système fraîchement installé — hérite du même bureau. Pour ajuster le
+rendu, le plus simple est de modifier le bureau graphiquement dans la session
+live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
+
 ## Structure du projet
 
 | Chemin | Rôle |
 |--------|------|
-| `auto/config` | Options de `lb config` figées → **build reproductible** (langue, clavier, utilisateur...) |
+| `auto/config` | Options de `lb config` figées => **build reproductible** (langue, clavier, utilisateur...) |
 | `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
 | `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
 | `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) |
@@ -89,7 +113,7 @@ paquet `flatpak` est déclaré dans `apps.list.chroot`).
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
 | `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
-| `config/includes.chroot_*/` | Fichiers à injecter dans le système (à venir) |
+| `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs) |
 | `build.sh` / `clean.sh` | Scripts pratiques |
 
 ## Réglages par défaut
