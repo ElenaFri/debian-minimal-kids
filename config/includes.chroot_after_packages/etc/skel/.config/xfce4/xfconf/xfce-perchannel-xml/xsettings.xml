@@ -4,4 +4,7 @@
     <property name="ThemeName" type="string" value="Yaru"/>
     <property name="IconThemeName" type="string" value="elementary-xfce"/>
   </property>
+  <property name="Gtk" type="empty">
+    <property name="CursorThemeName" type="string" value="ComixCursors-Orange"/>
+  </property>
 </channel>
