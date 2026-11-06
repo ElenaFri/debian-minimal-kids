@@ -89,10 +89,17 @@ Le bureau livré par défaut est défini dans
 - un **dock vertical à gauche** (48 px), centré, **transparent** et **ajusté à
   la taille de ses icônes**, avec six lanceurs, dans l'ordre : Firefox, Gedit,
   Scratch, Dessin, VLC, Thunar ;
+- un **bouton Menu à globe violet** : le menu des applications du panneau
+  affiche l'icône `kids-menu-globe` (SVG fourni dans
+  `usr/share/icons/hicolor/scalable/apps/`, résolu via le thème de repli
+  hicolor) accompagnée du libellé « Menu » (propriétés `button-icon` et
+  `button-title` du plugin dans `xfce4-panel.xml`) ;
 - un **bureau sans icônes** (fond d'écran seul) ;
-- un **thème clair et chaleureux** : GTK et bordures de fenêtres **Yaru**
-  (accent orange, paquet `yaru-theme-gtk`), icônes **elementary-xfce** (paquet
-  `elementary-xfce-icon-theme`) ;
+- un **thème clair et chaleureux** : GTK **Yaru-magenta** (accent magenta,
+  paquet `yaru-theme-gtk`), bordures de fenêtres **Yaru** (chrome neutre : les
+  variantes colorées n'embarquent pas de bordures xfwm4), icônes
+  **Yaru-magenta** (paquet `yaru-theme-icon`, dossiers magenta héritant du jeu
+  Yaru complet) ;
 - un **pointeur de souris** style bande dessinée, orange : **ComixCursors-Orange**
   (paquet `comixcursors-righthanded`, réglé dans `xsettings.xml` via
   `Gtk/CursorThemeName`) ;
@@ -150,13 +157,14 @@ live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
 | `auto/config` | Options de `lb config` figées => **build reproductible** (langue, clavier, utilisateur...) |
 | `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
 | `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
-| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Yaru, curseurs Comix, icônes elementary-xfce) |
+| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Yaru-magenta : GTK et icônes, curseurs Comix) |
 | `config/package-lists/apps.list.chroot` | Applications (ajoutées au fur et à mesure) |
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
 | `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
 | `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs, thème, autostart) |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/debian-minimal-kids/` | Fond d'écran par défaut |
+| `config/includes.chroot_after_packages/usr/share/icons/hicolor/scalable/apps/kids-menu-globe.svg` | Icône « globe violet » du bouton Menu |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/xfce/xfce-x.svg` | Lien vers notre fond : remplace l'image par défaut de xfdesktop |
 | `config/includes.chroot_after_packages/usr/local/bin/kids-set-wallpaper` | Pose `last-image` sur chaque moniteur à l'ouverture de session (complément) |
 | `build.sh` / `clean.sh` | Scripts pratiques |
