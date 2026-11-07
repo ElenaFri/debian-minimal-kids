@@ -1,0 +1,38 @@
+/* debian-minimal-kids — lisibilité du panneau XFCE.
+ *
+ * Le panneau du bas est semi-transparent (teinte nuit posée via
+ * background-rgba dans xfce4-panel.xml) ; on force ici le texte en blanc,
+ * avec une ombre portée, pour qu'il reste lisible quelle que soit la zone
+ * du fond d'écran derrière (y compris la lueur chaude de la bougie).
+ *
+ * Sélecteur : le panneau XFCE porte la classe de style "xfce4-panel"
+ * (même ciblage que les thèmes Mint/Greybird). Portée limitée au panneau :
+ * aucune autre application GTK n'est affectée. */
+
+.xfce4-panel {
+    color: #ffffff;
+}
+
+.xfce4-panel label {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.xfce4-panel button {
+    color: #ffffff;
+}
+
+.xfce4-panel button label,
+.xfce4-panel button image {
+    color: inherit;
+}
+
+/* Surbrillances : voiles clairs translucides (le texte blanc reste lisible) */
+.xfce4-panel button:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.xfce4-panel button:checked,
+.xfce4-panel button:active {
+    background-color: rgba(255, 255, 255, 0.18);
+}

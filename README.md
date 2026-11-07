@@ -84,8 +84,13 @@ paquet `flatpak` est déclaré dans `apps.list.chroot`).
 Le bureau livré par défaut est défini dans
 `config/includes.chroot_after_packages/etc/skel/.config/xfce4/` :
 
-- un **panneau horizontal en bas** (36 px) : menu des applications, bureaux,
-  liste des fenêtres, zone de notification, horloge ;
+- un **panneau horizontal en bas** (36 px), **semi-transparent** (teinte nuit
+  à 55 % d'opacité via `background-rgba`) avec **texte blanc forcé par
+  `~/.config/gtk-3.0/gtk.css`** — le fond d'écran reste visible tout en
+  garantissant la lisibilité : bouton Menu, bureaux, liste des fenêtres,
+  zone de notification, et une horloge affichant la date complète au format
+  « 7 novembre 2026, 22h 29 » (`digital-time-format` = `%-d %B %Y, %Hh %M`,
+  interprété par GLib) ;
 - un **dock vertical à gauche** (48 px), centré, **transparent** et **ajusté à
   la taille de ses icônes**, avec six lanceurs, dans l'ordre : Firefox, Gedit,
   Scratch, Dessin, VLC, Thunar ;
@@ -165,6 +170,7 @@ live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
 | `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs, thème, autostart) |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/debian-minimal-kids/` | Fond d'écran par défaut |
 | `config/includes.chroot_after_packages/usr/share/icons/hicolor/scalable/apps/kids-menu-globe.svg` | Icône « globe violet » du bouton Menu |
+| `config/includes.chroot_after_packages/etc/skel/.config/gtk-3.0/gtk.css` | Texte blanc + ombre sur le panneau XFCE (lisibilité sur fond transparent) |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/xfce/xfce-x.svg` | Lien vers notre fond : remplace l'image par défaut de xfdesktop |
 | `config/includes.chroot_after_packages/usr/local/bin/kids-set-wallpaper` | Pose `last-image` sur chaque moniteur à l'ouverture de session (complément) |
 | `build.sh` / `clean.sh` | Scripts pratiques |

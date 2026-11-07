@@ -9,6 +9,13 @@
       <property name="position-locked" type="bool" value="true"/>
       <property name="length" type="uint" value="100"/>
       <property name="size" type="uint" value="36"/>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.094118"/>
+        <value type="double" value="0.086275"/>
+        <value type="double" value="0.172549"/>
+        <value type="double" value="0.550000"/>
+      </property>
       <property name="plugin-ids" type="array">
         <value type="int" value="1"/>
         <value type="int" value="2"/>
@@ -54,7 +61,11 @@
     <property name="plugin-4" type="string" value="systray">
       <property name="square-icons" type="bool" value="true"/>
     </property>
-    <property name="plugin-5" type="string" value="clock"/>
+    <property name="plugin-5" type="string" value="clock">
+      <property name="mode" type="uint" value="2"/>
+      <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-format" type="string" value="%-d %B %Y, %Hh %M"/>
+    </property>
     <property name="plugin-6" type="string" value="launcher">
       <property name="items" type="array">
         <value type="string" value="firefox.desktop"/>
