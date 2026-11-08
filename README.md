@@ -10,9 +10,10 @@ Debian 13 « trixie » (stable). Le bureau XFCE est en français, avec un
 ensemble d'applications et de jeux en cours de constitution, ajoutés au fil
 des choix du projet.
 
-Applications : Firefox, LibreOffice (texte & présentation), Gedit, Thunar,
+Applications : Firefox ESR, LibreOffice (texte, présentation), Gedit, Thunar,
 VLC, Drawing, Galculator, Atril (PDF), Scratch (via Flathub).
-Jeux : Glpieces, Atomix, 2048, Swell Foop.
+Jeux : Extreme Tux Racer, Luanti, Atomix,
+2048, Swell Foop.
 
 ## Construire
 
