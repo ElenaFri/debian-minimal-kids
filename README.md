@@ -29,14 +29,19 @@ en session automatique (`lisa` sur `kids-pc`), en français.
 
 ## Tester dans QEMU
 
+Le son n'est pas émulé par défaut ; le script ajoute une carte Intel HDA reliée
+à l'audio de l'hôte :
+
 ```bash
-qemu-system-x86_64 -enable-kvm -m 2048 -smp 2 \
-  -cdrom debian-minimal-kids-amd64.hybrid.iso -boot d
+./run-qemu.sh              # live avec le son
+./run-qemu.sh --install    # + disque de 20 Go pour tester l'installation
 ```
 
-Pour tester l'installation : ajouter un disque (`qemu-img create -f qcow2
-kids-test.qcow2 20G`, option `-drive file=kids-test.qcow2,format=qcow2`),
-choisir « Install », puis relancer sans `-cdrom`.
+Commande équivalente, sur une seule ligne :
+
+```bash
+qemu-system-x86_64 -enable-kvm -m 2048 -smp 2 -cdrom debian-minimal-kids-amd64.hybrid.iso -boot d -audiodev pipewire,id=snd0 -device ich9-intel-hda -device hda-duplex,audiodev=snd0
+```
 
 ## Le bureau
 
@@ -111,7 +116,7 @@ passe admin ; inactif sur le live (connexion automatique).
 | `config/hooks/normal/0540-kids-slim.hook.chroot` | Allège l'image (Recommends superflus, traductions fr/en/C) |
 | `config/hooks/normal/0550-plymouth-theme.hook.chroot` | Embarque le thème Plymouth dans l'initramfs |
 | `config/includes.chroot_after_packages/` | DNS, politiques/marque-pages/thème Firefox, Plymouth, dconf, skel XFCE, fond d'écran |
-| `build.sh` / `clean.sh` | Scripts pratiques |
+| `build.sh` / `clean.sh` / `run-qemu.sh` | Scripts pratiques (build, nettoyage, test QEMU avec son) |
 
 ## Réglages par défaut
 

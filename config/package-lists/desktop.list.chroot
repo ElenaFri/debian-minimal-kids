@@ -7,6 +7,9 @@ lightdm-gtk-greeter
 network-manager-gnome
 pipewire-audio
 wireplumber
+xfce4-pulseaudio-plugin
+pavucontrol
+xfce4-notifyd
 x11-xserver-utils
 yaru-theme-gtk
 yaru-theme-icon
