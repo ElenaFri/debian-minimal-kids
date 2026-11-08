@@ -3,19 +3,37 @@
 # =============================================================================
 # debian-minimal-kids — allègement de l'image (hook chroot, après paquets).
 #
-# - Purge des paquets tirés par des « Recommends » inutiles ici :
-#   pocketsphinx-en-us (modèles de reconnaissance vocale *anglais*, via
-#   gstreamer1.0-plugins-bad) et mesa-vulkan-drivers (aucun de nos logiciels
-#   n'utilise Vulkan, OpenGL suffit — les jeux et Firefox tournent en GL).
-# - Nettoyage des caches apt : sinon ils atterrissent dans le squashfs
-#   (~270 Mo : listes de paquets, caches binaires, .deb téléchargés).
-#   Tout se régénère au premier « apt update ».
+# Objectif : garder l'ISO sous la limite de 2 Gio de GitHub, sans retirer la
+# moindre fonctionnalité (aucun paquet applicatif supprimé).
+#
+# 1. Purge de « Recommends » inutiles ici :
+#    pocketsphinx-en-us (modèles vocaux *anglais*, via gstreamer-plugins-bad)
+#    et mesa-vulkan-drivers (rien chez nous n'utilise Vulkan, OpenGL suffit).
+# 2. Système 100 % français : on ne garde que les traductions fr/en/C.
+#    - /usr/share/locale : suppression des autres langues (~48 Mio compressés)
+#    - /usr/share/doc    : on ne garde que les fichiers « copyright » (licences
+#      requises par la Debian Policy), ~44 Mio compressés
+#    - /usr/share/man    : on ne garde que l'anglais (sections manN) et le fr
+# 3. Nettoyage des caches apt (~270 Mo), régénérés au premier « apt update ».
 # =============================================================================
 
 set -e
 
+# --- 1. Recommends superflus -------------------------------------------------
 apt-get -y purge pocketsphinx-en-us mesa-vulkan-drivers
 
+# --- 2. Traductions : fr / en / C uniquement ---------------------------------
+find /usr/share/locale -mindepth 1 -maxdepth 1 -type d \
+    ! -name 'fr*' ! -name 'en*' ! -name 'C' -exec rm -rf {} +
+
+find /usr/share/doc -type f ! -name 'copyright' -delete
+find /usr/share/doc -type l -delete
+find /usr/share/doc -mindepth 1 -type d -empty -delete
+
+find /usr/share/man -mindepth 1 -maxdepth 1 -type d \
+    ! -name 'man*' ! -name 'fr' -exec rm -rf {} +
+
+# --- 3. Caches apt -----------------------------------------------------------
 apt-get clean
 rm -f /var/cache/apt/pkgcache.bin /var/cache/apt/srcpkgcache.bin
 rm -rf /var/lib/apt/lists/*

@@ -123,7 +123,7 @@ s'endort le lendemain.
 | `config/hooks/normal/0510-kids-performance.hook.chroot` | zram, earlyoom, couvre-feu actifs ; services inutiles masqués |
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
 | `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf |
-| `config/hooks/normal/0540-kids-slim.hook.chroot` | Purge les paquets superflus tirés par les « Recommends » |
+| `config/hooks/normal/0540-kids-slim.hook.chroot` | Allège l'image : purge des « Recommends » superflus, traductions fr/en/C seules |
 | `config/hooks/normal/0550-plymouth-theme.hook.chroot` | Embarque le thème Plymouth « kids » dans l'initramfs |
 | `config/includes.chroot_after_packages/etc/` | DNS familial, politiques Firefox, Plymouth, couvre-feu, dconf, skel XFCE |
 | `config/includes.chroot_after_packages/usr/lib/firefox-esr/distribution/` | Marque-pages de la barre personnelle |
