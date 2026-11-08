@@ -4,15 +4,23 @@ Système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour les
 enfants : simplicité, autonomie et initiation à l'informatique.
 
 Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/latest)
-(ISO ~1,9 Gio, vérifiable avec `SHA256SUMS.txt`)
+(ISO ~1,85 Gio, vérifiable avec `SHA256SUMS.txt`)
 
 ![Écran de démarrage](screenshots/default_boot_splash.png)
 
 ![Bureau par défaut](screenshots/default_desktop.png)
 
 Applications : Firefox ESR, LibreOffice (texte, présentation), Gedit, Thunar,
-VLC, Drawing, Galculator, qpdfview (PDF).
+VLC, Drawing, Galculator, qpdfview.
 Jeux : Extreme Tux Racer, Luanti, Atomix, 2048, Swell Foop.
+
+## Compatibilité
+
+- PC 64 bits (amd64), BIOS ou UEFI avec Secure Boot ; ~2 Gio de RAM.
+- Démarrage clé USB (image hybride) ou DVD. Essayer le mode live avant d'installer.
+- Non pris en charge : 32 bits, ARM (Raspberry Pi, Mac Apple Silicon) ; le WiFi
+  Broadcom et le matériel très récent peuvent manquer de pilote.
+- Test sans risque : machine virtuelle (voir `run-qemu.sh`).
 
 ## Construire
 
