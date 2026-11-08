@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# =============================================================================
+# debian-minimal-kids — délai du menu GRUB (amorçage UEFI) de l'ISO.
+#
+# S'exécute DANS binary/ pendant l'étape binaire du build (fichiers *.binary
+# de config/hooks/normal/), APRÈS la génération de boot/grub/config.cfg.
+#
+# Bug corrigé : le config.cfg généré par live-build ne définit pas « timeout ».
+# Or GRUB, quand cette variable est absente, attend indéfiniment une touche
+# (cf. grub_menu_get_timeout() → -1 dans grub-core/normal/menu.c) : sur une
+# machine UEFI, le live ne démarrait pas tout seul, il fallait appuyer sur
+# Entrée. Côté BIOS (isolinux), « timeout 0 » boote immédiatement : rien à
+# faire.
+#
+# 3 secondes : assez court pour un démarrage fluide, assez long pour qu'un
+# adulte puisse choisir une autre entrée (n'importe quelle touche fige le
+# compte à rebours).
+# =============================================================================
+
+set -e
+
+if [ -e boot/grub/config.cfg ]; then
+    # Pas de timeout déjà présent ?
+    if ! grep -q '^set timeout' boot/grub/config.cfg; then
+        sed -i '/^set default=/a set timeout=3' boot/grub/config.cfg
+        echo "GRUB timeout réglé à 3 secondes."
+    fi
+fi

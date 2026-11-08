@@ -19,3 +19,7 @@ systemctl enable zramswap.service
 systemctl enable earlyoom.service
 
 systemctl mask modemmanager.service
+
+# NetworkManager-wait-online : ne sert que si des services exigent le réseau
+# dès le boot (aucun ici) ; il tourne pour rien à chaque démarrage.
+systemctl mask NetworkManager-wait-online.service

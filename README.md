@@ -181,6 +181,27 @@ lui-même de la RAM), `irqbalance` (marginal sur 2-4 cœurs), TLP (batterie,
 pas CPU/RAM). Le système étant déjà minimal, les vrais gros consommateurs
 restent les applications elles-mêmes (Firefox, LibreOffice).
 
+## Temps de démarrage
+
+- **Squashfs en zstd** (`--chroot-squashfs-compression-type zstd` dans
+  `auto/config`) : le système live est décompressé ~5-10× plus vite qu'avec
+  le xz par défaut — c'est le principal poste du démarrage d'un live USB.
+  Contrepartie : ISO ~10 % plus grosse (≈ 3,3 Go).
+- **Menu GRUB (UEFI) : 3 s** (hook `0520-grub-timeout.binary`). Corrige au
+  passage un vrai bug : sans `set timeout`, GRUB attend **indéfiniment** une
+  touche — l'ISO ne démarrait pas toute seule sur les machines UEFI (invisible
+  dans nos tests QEMU, qui passent par le BIOS/isolinux, où `timeout 0` boote
+  immédiatement).
+- **NetworkManager-wait-online masqué** (hook `0510`) : aucun service n'a
+  besoin du réseau dès le boot sur ce bureau.
+- **GRUB_TIMEOUT = 1 s sur le système installé** (`preseed.cfg`, contre 5 s
+  par défaut) via `preseed/late_command`.
+- L'initrd est déjà optimal : préfixe microcode (cpio brut, standard Debian)
+  + archive principale **zstd** (défaut de trixie), vérifié dans l'ISO.
+
+Après un build, affiner au réel : `systemd-analyze` (chaîne critique) dans
+la session live ou installée.
+
 ## Structure du projet
 
 | Chemin | Rôle |
@@ -193,7 +214,8 @@ restent les applications elles-mêmes (Firefox, LibreOffice).
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
 | `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
-| `config/hooks/normal/0510-kids-performance.hook.chroot` | Active zramswap + earlyoom, masque ModemManager |
+| `config/hooks/normal/0510-kids-performance.hook.chroot` | Active zramswap + earlyoom, masque ModemManager et NM-wait-online |
+| `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s (corrige l'attente infinie sans timeout) |
 | `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs, thème, autostart) |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/debian-minimal-kids/` | Fond d'écran par défaut |
 | `config/includes.chroot_after_packages/usr/share/icons/hicolor/scalable/apps/kids-menu-globe.svg` | Icône « globe violet » du bouton Menu |

@@ -17,6 +17,7 @@ lb config noauto \
     --distribution trixie \
     --architectures amd64 \
     --archive-areas "main contrib non-free non-free-firmware" \
+    --chroot-squashfs-compression-type zstd \
     --debian-installer live \
     --bootappend-live "boot=live components quiet splash live-config.username=lisa live-config.user-fullname=Lisa live-config.hostname=kids-pc live-config.locales=fr_FR.UTF-8 live-config.keyboard-layouts=fr live-config.timezone=Europe/Paris" \
     --bootappend-install "locale=fr_FR.UTF-8 keymap=fr" \
