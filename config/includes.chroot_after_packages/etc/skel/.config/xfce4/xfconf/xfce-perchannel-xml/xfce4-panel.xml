@@ -44,7 +44,6 @@
       <property name="plugin-ids" type="array">
         <value type="int" value="6"/>
         <value type="int" value="7"/>
-        <value type="int" value="8"/>
         <value type="int" value="9"/>
         <value type="int" value="10"/>
         <value type="int" value="11"/>
@@ -87,11 +86,6 @@
     <property name="plugin-7" type="string" value="launcher">
       <property name="items" type="array">
         <value type="string" value="gedit.desktop"/>
-      </property>
-    </property>
-    <property name="plugin-8" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="scratch.desktop"/>
       </property>
     </property>
     <property name="plugin-9" type="string" value="launcher">

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# =============================================================================
+# debian-minimal-kids — allègement de l'image (hook chroot, après paquets).
+#
+# - Purge des paquets tirés par des « Recommends » inutiles ici :
+#   pocketsphinx-en-us (modèles de reconnaissance vocale *anglais*, via
+#   gstreamer1.0-plugins-bad) et mesa-vulkan-drivers (aucun de nos logiciels
+#   n'utilise Vulkan, OpenGL suffit — les jeux et Firefox tournent en GL).
+# - Nettoyage des caches apt : sinon ils atterrissent dans le squashfs
+#   (~270 Mo : listes de paquets, caches binaires, .deb téléchargés).
+#   Tout se régénère au premier « apt update ».
+# =============================================================================
+
+set -e
+
+apt-get -y purge pocketsphinx-en-us mesa-vulkan-drivers
+
+apt-get clean
+rm -f /var/cache/apt/pkgcache.bin /var/cache/apt/srcpkgcache.bin
+rm -rf /var/lib/apt/lists/*

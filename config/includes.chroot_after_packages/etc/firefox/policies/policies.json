@@ -4,6 +4,45 @@
       "Enabled": false,
       "Locked": true
     },
-    "BlockAboutConfig": true
+    "BlockAboutConfig": true,
+    "DisablePrivateBrowsing": true,
+
+    "NoDefaultBookmarks": true,
+    "Homepage": {
+      "URL": "https://www.lumni.fr"
+    },
+    "Preferences": {
+      "browser.toolbars.bookmarks.visibility": {
+        "Value": "always",
+        "Status": "locked"
+      },
+      "browser.ml.chat.provider": {
+        "Value": "https://chat.mistral.ai/chat",
+        "Status": "locked"
+      }
+    },
+
+    "SearchEngines": {
+      "Add": [
+        {
+          "Name": "Qwant Junior",
+          "URLTemplate": "https://www.qwantjunior.com/?q={searchTerms}",
+          "SuggestURLTemplate": "https://api.qwant.com/egp/suggest/?client=opensearch&q={searchTerms}",
+          "Method": "GET"
+        }
+      ],
+      "Default": "Qwant Junior"
+    },
+
+    "DisableTelemetry": true,
+    "DisableFirefoxStudies": true,
+    "DisableFirefoxAccounts": true,
+    "DisableAppUpdate": true,
+    "DisableProfileRefresh": true,
+    "DisableFormHistory": true,
+    "OfferToSaveLogins": false,
+    "DontCheckDefaultBrowser": true,
+    "OverrideFirstRunPage": "",
+    "CaptivePortal": false
   }
 }

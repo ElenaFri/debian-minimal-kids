@@ -11,7 +11,9 @@ x11-xserver-utils
 yaru-theme-gtk
 yaru-theme-icon
 comixcursors-righthanded
-firmware-linux
+firmware-linux-free
+firmware-amd-graphics
+firmware-intel-graphics
 firmware-iwlwifi
 firmware-realtek
 firmware-atheros
