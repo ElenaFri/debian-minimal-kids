@@ -1,14 +1,17 @@
 # debian-minimal-kids
 
-Un système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour
-les enfants : simplicité, autonomie et initiation à l'informatique.
+Système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour les
+enfants : simplicité, autonomie et initiation à l'informatique.
+
+Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/latest)
+(ISO ~2 Go, vérifiable avec `SHA256SUMS.txt`)
 
 ![Écran de démarrage](screenshots/default_boot_splash.png)
 
 ![Bureau par défaut](screenshots/default_desktop.png)
 
-Applications : Firefox ESR, LibreOffice (texte, présentation), Gedit,
-Thunar, VLC, Drawing, Galculator, Atril (PDF), Scratch (en ligne).
+Applications : Firefox ESR, LibreOffice (texte, présentation), Gedit, Thunar,
+VLC, Drawing, Galculator, Atril (PDF).
 Jeux : Extreme Tux Racer, Luanti, Atomix, 2048, Swell Foop.
 
 ## Construire
@@ -21,8 +24,8 @@ sudo apt install live-build debootstrap
 ./clean.sh          # repartir de zéro (garde le cache des paquets)
 ```
 
-Résultat : `debian-minimal-kids-amd64.hybrid.iso`. Au démarrage du live :
-XFCE en session automatique (`lisa` sur `kids-pc`), en français.
+Résultat : `debian-minimal-kids-amd64.hybrid.iso`. Au démarrage du live, XFCE
+en session automatique (`lisa` sur `kids-pc`), en français.
 
 ## Tester dans QEMU
 
@@ -31,87 +34,69 @@ qemu-system-x86_64 -enable-kvm -m 2048 -smp 2 \
   -cdrom debian-minimal-kids-amd64.hybrid.iso -boot d
 ```
 
-Pour tester aussi l'installation : créer un disque
-(`qemu-img create -f qcow2 kids-test.qcow2 20G`), l'ajouter avec
-`-drive file=kids-test.qcow2,format=qcow2`, choisir l'entrée Install,
-puis relancer sans `-cdrom`.
+Pour tester l'installation : ajouter un disque (`qemu-img create -f qcow2
+kids-test.qcow2 20G`, option `-drive file=kids-test.qcow2,format=qcow2`),
+choisir « Install », puis relancer sans `-cdrom`.
 
 ## Le bureau
 
-Tout est dans `etc/skel/.config/` (via
-`config/includes.chroot_after_packages/`), identique sur le live et le
-système installé. Pour ajuster : modifier le bureau dans la session live,
-puis recopier `~/.config/` dans `etc/skel/` du dépôt.
+Toute la configuration vit dans `etc/skel/.config/` (via
+`config/includes.chroot_after_packages/`), identique sur le live et le système
+installé.
 
-- Panneau du bas semi-transparent, texte blanc forcé par `gtk.css` pour la
-  lisibilité : bouton Menu (globe violet), bureaux, fenêtres,
-  notifications et horloge « 7 novembre 2026, 22h 29 » épinglées à droite.
+- Panneau du bas semi-transparent, texte blanc forcé (`gtk.css`) : bouton Menu
+  (globe violet), bureaux, fenêtres, notifications et horloge « 7 novembre
+  2026, 22h 29 » épinglées à droite.
 - Dock vertical à gauche : Firefox, Gedit, Dessin, VLC, Thunar.
-- Thème Yaru-magenta (GTK, icônes, bordures de fenêtres), pointeur
-  ComixCursors-Orange, bureau sans icônes.
-- Fond d'écran « chat endormi à la bougie » en mode zoom : remplit
-  l'écran à toutes les résolutions, sans déformation.
-- Écran de démarrage Plymouth « kids » : icône du projet sur tuile
-  magenta, mention « debian 13 » (typographie Debian d'origine), adapté à
-  toute résolution.
-- Thunar en vue liste ; correcteur orthographique français actif partout
-  (dictionnaires hunspell-fr, surlignage gedit activé via dconf).
+- Thème Yaru-magenta (GTK, icônes, bordures), pointeur ComixCursors-Orange,
+  bureau sans icônes.
+- Fond d'écran « chat endormi à la bougie » en mode zoom : remplit l'écran à
+  toute résolution, sans déformation.
+- Splash Plymouth « kids » : icône sur tuile magenta, « debian 13 » en
+  typographie Debian d'origine, adapté à toute résolution.
+- Thunar en vue liste ; correcteur orthographique français actif partout.
 
-Fichiers XFCE : panneaux dans `xfce4-panel.xml` (lanceurs dans
-`panel/launcher-<id>/`), thème dans `xsettings.xml`, bordures et
-compositeur dans `xfwm4.xml`, bureau dans `xfce4-desktop.xml`. Le fond est
-posé par `kids-set-wallpaper` (autostart) car xfdesktop 4.20 le range sous
-une clé dépendant du connecteur du moniteur.
+Config XFCE : `xfce4-panel.xml` (panneaux, lanceurs dans `panel/launcher-<id>/`),
+`xsettings.xml` (thème), `xfwm4.xml` (bordures, compositeur), `xfce4-desktop.xml`
+(bureau). Le fond est posé par `kids-set-wallpaper` (autostart), xfdesktop 4.20
+le rangeant sous une clé liée au connecteur du moniteur.
 
 ## Firefox
 
 ![Page Firefox par défaut](screenshots/default_firefox_start_page.png)
 
-Configuré par `etc/firefox/policies/policies.json` (politiques
-d'entreprise) et `usr/lib/firefox-esr/distribution/distribution.ini`
-(marque-pages de distribution).
+Configuré par `policies.json` (politiques) et `distribution.ini` (marque-pages).
 
-- Marque-pages directement sur la barre personnelle (toujours visible) :
-  dossiers Vidéos (YouTube, Disney+) et École (Khan Academy, Lumni,
-  Scratch, 1jour1actu), Wikipédia en accès direct. Page d'accueil : Lumni.
-- Moteur par défaut : Qwant Junior (résultats adaptés aux enfants, choix
-  verrouillé). Assistant IA : Le Chat Mistral.
-- Thème Alpenglow (dégradé violet/magenta) assorti au style de l'OS,
-  appliqué au 1er lancement par AutoConfig (`kids.cfg`).
-- Allégé : télémétrie, études, comptes et mises à jour internes
-  désactivés ; importation de profil et popups mots de passe/formulaires
+- Marque-pages sur la barre personnelle : dossiers Vidéos (YouTube, Disney+) et
+  École (Khan Academy, Lumni, Scratch, 1jour1actu), Wikipédia en direct. Page
+  d'accueil : Lumni.
+- Moteur : Qwant Junior (verrouillé). Assistant IA : Le Chat Mistral.
+- Thème Alpenglow appliqué au 1er lancement (AutoConfig `kids.cfg`).
+- Allégé : télémétrie, études, comptes, mises à jour et navigation privée
   désactivés ; pas de page de bienvenue.
 
 ## Contrôle parental
 
-1. DNS familial : toutes les connexions passent par OpenDNS FamilyShield
-   (`etc/NetworkManager/conf.d/99-kids-dns.conf`) ; les DNS du DHCP sont
-   ignorés, pas de contournement depuis l'applet réseau.
-2. Firefox verrouillé : DoH désactivé (il contournerait le DNS familial),
-   `about:config` bloqué, navigation privée désactivée — l'historique
-   reste consultable. La navigation normale est inchangée.
-3. Couvre-feu : suspension à 21h30 (`etc/systemd/system/kids-bedtime.*`,
-   activée par le hook 0510) ; au réveil la session est verrouillée (mot
-   de passe de lisa). L'inactivité ne verrouille jamais l'écran.
+1. DNS familial : tout passe par OpenDNS FamilyShield (`99-kids-dns.conf`) ;
+   DNS du DHCP ignorés, pas de contournement.
+2. Firefox verrouillé : DoH et `about:config` désactivés, navigation privée
+   coupée (historique consultable).
+3. Couvre-feu : suspension à 21h30 (`kids-bedtime.*`, hook 0510) ; au réveil la
+   session se verrouille.
 
-Changer l'heure : éditer `OnCalendar` du timer puis
-`sudo systemctl daemon-reload && sudo systemctl restart kids-bedtime.timer`.
-Désactiver : `sudo systemctl disable --now kids-bedtime.timer`.
-Limites : contournable avec le mot de passe administrateur ; inopérant sur
-le live (connexion automatique) ; une machine démarrée après 21h30
-s'endort le lendemain.
+Régler l'heure : `OnCalendar` du timer, puis `sudo systemctl daemon-reload &&
+sudo systemctl restart kids-bedtime.timer`. Désactiver :
+`sudo systemctl disable --now kids-bedtime.timer`. Contournable avec le mot de
+passe admin ; inactif sur le live (connexion automatique).
 
 ## Optimisations
 
-- zram (zstd, 50 % de la RAM) + earlyoom ; `vm.swappiness = 100`
-  (`etc/sysctl.d/99-kids-zram.conf`). ModemManager et NM-wait-online
-  masqués (hook 0510).
-- Squashfs zstd (boot rapide), menu GRUB UEFI à 3 s (hook 0520, corrige
-  un blocage au démarrage sur UEFI), GRUB_TIMEOUT = 1 sur le système
-  installé.
-- ISO contenue : firmwares limités à l'utile (wifi, audio, iGPU), caches
-  apt-file/xapian/plocate non construits (hooks live-build par défaut
-  désactivés), paquets superflus purgés (hook 0540).
+- zram (zstd, 50 % RAM) + earlyoom, `vm.swappiness = 100` ; ModemManager et
+  NM-wait-online masqués (hook 0510).
+- Squashfs zstd niveau 22, menu GRUB UEFI à 3 s (hook 0520), `GRUB_TIMEOUT = 1`
+  une fois installé.
+- ISO allégée : firmwares utiles seulement, caches apt-file/xapian/plocate non
+  construits, paquets et traductions superflus purgés (hook 0540).
 
 ## Structure du projet
 
@@ -120,15 +105,12 @@ s'endort le lendemain.
 | `auto/config` | Options `lb config` figées |
 | `config/package-lists/*.list.chroot` | Paquets : live, locale FR, bureau, applications, jeux |
 | `config/includes.installer/preseed.cfg` | Installateur en français |
-| `config/hooks/normal/0510-kids-performance.hook.chroot` | zram, earlyoom, couvre-feu actifs ; services inutiles masqués |
+| `config/hooks/normal/0510-kids-performance.hook.chroot` | zram, earlyoom, couvre-feu ; services inutiles masqués |
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
 | `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf |
-| `config/hooks/normal/0540-kids-slim.hook.chroot` | Allège l'image : purge des « Recommends » superflus, traductions fr/en/C seules |
-| `config/hooks/normal/0550-plymouth-theme.hook.chroot` | Embarque le thème Plymouth « kids » dans l'initramfs |
-| `config/includes.chroot_after_packages/etc/` | DNS familial, politiques Firefox, Plymouth, couvre-feu, dconf, skel XFCE |
-| `config/includes.chroot_after_packages/usr/lib/firefox-esr/distribution/` | Marque-pages de la barre personnelle |
-| `config/includes.chroot_after_packages/usr/lib/firefox-esr/kids.cfg` | AutoConfig : applique le thème Alpenglow |
-| `config/includes.chroot_after_packages/usr/share/` | Fond d'écran, icône du Menu, thème Plymouth |
+| `config/hooks/normal/0540-kids-slim.hook.chroot` | Allège l'image (Recommends superflus, traductions fr/en/C) |
+| `config/hooks/normal/0550-plymouth-theme.hook.chroot` | Embarque le thème Plymouth dans l'initramfs |
+| `config/includes.chroot_after_packages/` | DNS, politiques/marque-pages/thème Firefox, Plymouth, dconf, skel XFCE, fond d'écran |
 | `build.sh` / `clean.sh` | Scripts pratiques |
 
 ## Réglages par défaut
@@ -139,5 +121,4 @@ s'endort le lendemain.
 | Fuseau | `Europe/Paris` |
 | Utilisateur / machine | `lisa` / `kids-pc` |
 
-Définis dans `auto/config` (`live-config.*`) ; l'installateur est
-préconfiguré en français (`preseed.cfg`).
+Définis dans `auto/config` ; installateur préconfiguré en français (`preseed.cfg`).
