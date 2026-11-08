@@ -1,0 +1,21 @@
+#!/bin/sh
+# 0550-plymouth-theme — embarque le thème Plymouth « kids » dans l'initramfs.
+#
+# Les fichiers du thème (/usr/share/plymouth/themes/kids/) et le choix du thème
+# par défaut (/etc/plymouth/plymouthd.conf -> Theme=kids) sont déjà posés via
+# includes.chroot_after_packages, copiés AVANT ce hook. Il ne reste qu'à
+# régénérer l'initramfs pour qu'il contienne le thème (le splash s'affiche
+# au tout début du démarrage, donc depuis l'initramfs).
+
+set -e
+
+# Rien à faire si Plymouth n'est pas présent.
+[ -x /usr/sbin/plymouthd ] || exit 0
+command -v update-initramfs >/dev/null 2>&1 || exit 0
+
+# Vérifie que notre thème est bien le thème par défaut détecté.
+if [ "$(/usr/sbin/plymouth-set-default-theme 2>/dev/null)" != "kids" ]; then
+    /usr/sbin/plymouth-set-default-theme kids
+fi
+
+update-initramfs -u

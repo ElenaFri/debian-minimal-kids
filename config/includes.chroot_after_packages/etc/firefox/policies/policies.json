@@ -6,6 +6,7 @@
     },
     "BlockAboutConfig": true,
     "DisablePrivateBrowsing": true,
+    "DisableProfileImport": true,
 
     "NoDefaultBookmarks": true,
     "Homepage": {

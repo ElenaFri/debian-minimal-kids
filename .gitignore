@@ -12,6 +12,7 @@
 *.files
 *.packages
 chroot.packages.*
+chroot.installed_tmp_pkgs
 binary.modified_timestamps
 live-image-*
 wget-log*
@@ -37,6 +38,7 @@ config/hooks/normal/*
 !config/hooks/normal/0520-grub-timeout.binary
 !config/hooks/normal/0530-dconf-defaults.hook.chroot
 !config/hooks/normal/0540-kids-slim.hook.chroot
+!config/hooks/normal/0550-plymouth-theme.hook.chroot
 
 # Downloaded packages and generated filesystem
 cache/

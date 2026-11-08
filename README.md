@@ -3,7 +3,9 @@
 Un système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour
 les enfants : simplicité, autonomie et initiation à l'informatique.
 
-![Default desktop](screenshots/default_desktop.png)
+![Écran de démarrage](screenshots/default_boot_splash.png)
+
+![Bureau par défaut](screenshots/default_desktop.png)
 
 Applications : Firefox ESR, LibreOffice (texte, présentation), Gedit,
 Thunar, VLC, Drawing, Galculator, Atril (PDF), Scratch (en ligne).
@@ -49,6 +51,9 @@ puis recopier `~/.config/` dans `etc/skel/` du dépôt.
   ComixCursors-Orange, bureau sans icônes.
 - Fond d'écran « chat endormi à la bougie » en mode zoom : remplit
   l'écran à toutes les résolutions, sans déformation.
+- Écran de démarrage Plymouth « kids » : icône du projet sur tuile
+  magenta, mention « debian 13 » (typographie Debian d'origine), adapté à
+  toute résolution.
 - Thunar en vue liste ; correcteur orthographique français actif partout
   (dictionnaires hunspell-fr, surlignage gedit activé via dconf).
 
@@ -60,7 +65,7 @@ une clé dépendant du connecteur du moniteur.
 
 ## Firefox
 
-![Default Firefox start page](screenshots/default_firefox_start_page.png)
+![Page Firefox par défaut](screenshots/default_firefox_start_page.png)
 
 Configuré par `etc/firefox/policies/policies.json` (politiques
 d'entreprise) et `usr/lib/firefox-esr/distribution/distribution.ini`
@@ -71,9 +76,11 @@ d'entreprise) et `usr/lib/firefox-esr/distribution/distribution.ini`
   Scratch, 1jour1actu), Wikipédia en accès direct. Page d'accueil : Lumni.
 - Moteur par défaut : Qwant Junior (résultats adaptés aux enfants, choix
   verrouillé). Assistant IA : Le Chat Mistral.
+- Thème Alpenglow (dégradé violet/magenta) assorti au style de l'OS,
+  appliqué au 1er lancement par AutoConfig (`kids.cfg`).
 - Allégé : télémétrie, études, comptes et mises à jour internes
-  désactivés ; pas de popups mots de passe/formulaires ni page de
-  bienvenue.
+  désactivés ; importation de profil et popups mots de passe/formulaires
+  désactivés ; pas de page de bienvenue.
 
 ## Contrôle parental
 
@@ -117,9 +124,11 @@ s'endort le lendemain.
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
 | `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf |
 | `config/hooks/normal/0540-kids-slim.hook.chroot` | Purge les paquets superflus tirés par les « Recommends » |
-| `config/includes.chroot_after_packages/etc/` | DNS familial, politiques Firefox, couvre-feu, dconf, skel XFCE |
+| `config/hooks/normal/0550-plymouth-theme.hook.chroot` | Embarque le thème Plymouth « kids » dans l'initramfs |
+| `config/includes.chroot_after_packages/etc/` | DNS familial, politiques Firefox, Plymouth, couvre-feu, dconf, skel XFCE |
 | `config/includes.chroot_after_packages/usr/lib/firefox-esr/distribution/` | Marque-pages de la barre personnelle |
-| `config/includes.chroot_after_packages/usr/share/` | Fond d'écran, icône du Menu |
+| `config/includes.chroot_after_packages/usr/lib/firefox-esr/kids.cfg` | AutoConfig : applique le thème Alpenglow |
+| `config/includes.chroot_after_packages/usr/share/` | Fond d'écran, icône du Menu, thème Plymouth |
 | `build.sh` / `clean.sh` | Scripts pratiques |
 
 ## Réglages par défaut

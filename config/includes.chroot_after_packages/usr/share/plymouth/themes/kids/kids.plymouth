@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Debian Minimal Kids
+Description=Splash de démarrage — icône du projet sur fond uni
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/kids
+ScriptFile=/usr/share/plymouth/themes/kids/kids.script

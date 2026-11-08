@@ -1,0 +1,95 @@
+# kids.script — splash de démarrage de debian-minimal-kids
+#
+# Objectif : remplacer le splash Debian par défaut par un écran épuré :
+#   - un fond UNI violet (aubergine) accordé à l'icône et au fond d'écran ;
+#   - l'icône du projet (icon.png) sur une tuile magenta arrondie (même teinte
+#     que « debian 13 »), NON étalée, légèrement décalée au-dessus du centre ;
+#   - la mention « debian 13 » en bas, dans la typographie Debian d'origine
+#     (mot-symbole officiel recoloré), comme sur l'écran par défaut.
+# S'adapte à toutes les résolutions : le fond uni remplit l'écran et les
+# éléments sont positionnés en proportion des dimensions de la fenêtre.
+
+#------------------------------- Fond uni ------------------------------------
+# #2D1535 (aubergine foncé) -> composantes RVB / 255
+bg.red   = 0.176;
+bg.green = 0.082;
+bg.blue  = 0.208;
+Window.SetBackgroundTopColor(bg.red, bg.green, bg.blue);
+Window.SetBackgroundBottomColor(bg.red, bg.green, bg.blue);
+
+#--------------------------- Dimensions écran --------------------------------
+screen.width  = Window.GetWidth();
+screen.height = Window.GetHeight();
+screen.x      = Window.GetX();
+screen.y      = Window.GetY();
+screen.small  = Math.Min(screen.width, screen.height);
+
+#--------------------- Logo du projet (décalé du centre) ---------------------
+# Taille cible : 36 % de la plus petite dimension de l'écran (jamais étalé).
+logo.source = Image("logo.png");
+logo.target = screen.small * 0.36;
+logo.ratio  = logo.target / logo.source.GetWidth();
+logo.image  = logo.source.Scale(logo.source.GetWidth()  * logo.ratio,
+                                logo.source.GetHeight() * logo.ratio);
+logo.sprite = Sprite(logo.image);
+logo.x = screen.x + (screen.width  - logo.image.GetWidth())  / 2;
+logo.y = screen.y + (screen.height - logo.image.GetHeight()) / 2 - screen.height * 0.07;
+logo.sprite.SetPosition(logo.x, logo.y, 1);
+
+#----------------------- Mention « debian 13 » en bas ------------------------
+# Mot-symbole « debian 13 » dans la typographie Debian officielle (image
+# brand.png, issue du thème Debian et recolorée en magenta clair #E07BE8).
+# Largeur = 30 % de la plus petite dimension de l'écran (jamais étalé).
+brand.source = Image("brand.png");
+brand.target = screen.small * 0.30;
+brand.ratio  = brand.target / brand.source.GetWidth();
+brand.image  = brand.source.Scale(brand.source.GetWidth()  * brand.ratio,
+                                  brand.source.GetHeight() * brand.ratio);
+brand.sprite = Sprite(brand.image);
+brand.x = screen.x + (screen.width - brand.image.GetWidth()) / 2;
+brand.y = screen.y + screen.height * 0.88;
+brand.sprite.SetPosition(brand.x, brand.y, 1);
+
+#------------------------- Messages de démarrage -----------------------------
+# Affichés discrètement au-dessus de la marque (gris clair).
+message.sprite = Sprite();
+message.sprite.SetZ(5);
+fun message_callback(text) {
+    message.image = Image.Text(text, 0.80, 0.80, 0.80);
+    message.sprite.SetImage(message.image);
+    message.sprite.SetX(screen.x + (screen.width - message.image.GetWidth()) / 2);
+    message.sprite.SetY(screen.y + screen.height * 0.84);
+}
+Plymouth.SetMessageFunction(message_callback);
+
+#--------------------- Saisie de mot de passe (chiffrement) ------------------
+# Nécessaire si l'utilisateur installe le système avec un disque chiffré.
+password.prompt = Sprite();
+password.dots   = Sprite();
+password.prompt.SetZ(20);
+password.dots.SetZ(20);
+password.prompt.SetOpacity(0);
+password.dots.SetOpacity(0);
+
+fun display_password_callback(prompt_text, bullet_count) {
+    ptext.image = Image.Text(prompt_text, 1.0, 1.0, 1.0);
+    password.prompt.SetImage(ptext.image);
+    password.prompt.SetX(screen.x + (screen.width - ptext.image.GetWidth()) / 2);
+    password.prompt.SetY(screen.y + screen.height * 0.72);
+    password.prompt.SetOpacity(1);
+
+    bullet_string = "";
+    for (i = 0; i < bullet_count; i++) bullet_string += "*";
+    pdots.image = Image.Text(bullet_string, 1.0, 1.0, 1.0);
+    password.dots.SetImage(pdots.image);
+    password.dots.SetX(screen.x + (screen.width - pdots.image.GetWidth()) / 2);
+    password.dots.SetY(screen.y + screen.height * 0.77);
+    password.dots.SetOpacity(1);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_callback);
+
+fun display_normal_callback() {
+    password.prompt.SetOpacity(0);
+    password.dots.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(display_normal_callback);

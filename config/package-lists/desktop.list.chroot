@@ -23,3 +23,5 @@ bluez-firmware
 dconf-cli
 zram-tools
 earlyoom
+plymouth
+plymouth-label
