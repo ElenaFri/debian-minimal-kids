@@ -49,6 +49,10 @@ binary/
 # VM test disks
 *.qcow2
 
+# Artefacts de release (attachés à la release GitHub, jamais au dépôt)
+SHA256SUMS.txt
+RELEASE_NOTES.md
+
 # Temporary build files
 tmp/
 temp/
