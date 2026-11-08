@@ -34,6 +34,7 @@ config/hooks/normal/*
 
 # Nos hooks personnalisés (à versionner)
 !config/hooks/normal/0500-flatpak-scratch.hook.chroot
+!config/hooks/normal/0510-kids-performance.hook.chroot
 
 # Downloaded packages and generated filesystem
 cache/

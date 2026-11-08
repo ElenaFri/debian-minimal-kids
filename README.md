@@ -155,6 +155,32 @@ comme un système fraîchement installé — hérite du même bureau. Pour ajust
 rendu, le plus simple est de modifier le bureau graphiquement dans la session
 live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
 
+## Optimisations système
+
+Pour gagner en réactivité et économiser mémoire et CPU, sans ajouter de
+complexité :
+
+- **zram** (paquet `zram-tools`) : swap compressé **dans la RAM**. C'est
+  l'optimisation la plus efficace sur les machines modestes : sous pression
+  mémoire, le système compresse les pages inactives au lieu de ramer sur le
+  disque. Configuré en **zstd** et **50 % de la RAM** (`etc/default/zramswap`),
+  accompagné de `vm.swappiness = 100` et `vm.page-cluster = 0`
+  (`etc/sysctl.d/99-kids-zram.conf`).
+- **earlyoom** : si la mémoire est réellement saturée, il termine proprement
+  le processus le plus gourmand (en pratique le navigateur) au lieu de laisser
+  la machine se figer — un navigateur fermé se rouvre, une machine gelée
+  réclame un redémarrage forcé.
+- **ModemManager masqué** (hook `0510-kids-performance.hook.chroot`) : ce
+  service — installé via les « Recommends » de NetworkManager — sonde
+  périodiquement des modems 3G/4G absents de la machine cible. Le masquer
+  économise ~10 Mo de RAM et des réveils CPU, sans impact sur le wifi ni
+  l'Ethernet. Le même hook garantit que `zramswap` et `earlyoom` sont actifs.
+
+Délibérément **non** installés : `preload` (bénéfice non prouvé, consomme
+lui-même de la RAM), `irqbalance` (marginal sur 2-4 cœurs), TLP (batterie,
+pas CPU/RAM). Le système étant déjà minimal, les vrais gros consommateurs
+restent les applications elles-mêmes (Firefox, LibreOffice).
+
 ## Structure du projet
 
 | Chemin | Rôle |
@@ -162,15 +188,18 @@ live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
 | `auto/config` | Options de `lb config` figées => **build reproductible** (langue, clavier, utilisateur...) |
 | `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
 | `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
-| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Yaru-magenta : GTK et icônes, curseurs Comix) |
+| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Yaru-magenta : GTK et icônes, curseurs Comix) + optimisations (zram, earlyoom) |
 | `config/package-lists/apps.list.chroot` | Applications (ajoutées au fur et à mesure) |
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
 | `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
+| `config/hooks/normal/0510-kids-performance.hook.chroot` | Active zramswap + earlyoom, masque ModemManager |
 | `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs, thème, autostart) |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/debian-minimal-kids/` | Fond d'écran par défaut |
 | `config/includes.chroot_after_packages/usr/share/icons/hicolor/scalable/apps/kids-menu-globe.svg` | Icône « globe violet » du bouton Menu |
 | `config/includes.chroot_after_packages/etc/skel/.config/gtk-3.0/gtk.css` | Texte blanc + ombre sur le panneau XFCE (lisibilité sur fond transparent) |
+| `config/includes.chroot_after_packages/etc/default/zramswap` | zram : compression zstd, taille = 50 % de la RAM |
+| `config/includes.chroot_after_packages/etc/sysctl.d/99-kids-zram.conf` | `vm.swappiness` et `vm.page-cluster` accordés à zram |
 | `config/includes.chroot_after_packages/usr/share/backgrounds/xfce/xfce-x.svg` | Lien vers notre fond : remplace l'image par défaut de xfdesktop |
 | `config/includes.chroot_after_packages/usr/local/bin/kids-set-wallpaper` | Pose `last-image` sur chaque moniteur à l'ouverture de session (complément) |
 | `build.sh` / `clean.sh` | Scripts pratiques |

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# =============================================================================
+# Optimisations debian-minimal-kids — s'exécute DANS le chroot pendant le
+# build (après installation des paquets de desktop.list.chroot).
+#
+# - zramswap + earlyoom : services activés dès le premier démarrage
+#   (idempotent : sans effet s'ils le sont déjà).
+# - ModemManager masqué : installé via les « Recommends » de NetworkManager,
+#   il sonde périodiquement du matériel (modem 3G/4G) absent de la machine
+#   cible. Le masquer économise ~10 Mo de RAM et des réveils CPU, sans
+#   affecter le wifi ni l'Ethernet (NetworkManager fonctionne parfaitement
+#   sans lui).
+# =============================================================================
+
+set -e
+
+systemctl enable zramswap.service
+systemctl enable earlyoom.service
+
+systemctl mask modemmanager.service

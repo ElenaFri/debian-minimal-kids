@@ -1,0 +1,14 @@
+# debian-minimal-kids — swap compressé en RAM (paquet zram-tools).
+# Options lues par /usr/sbin/zramswap au démarrage (zramswap.service).
+# Sans ce fichier : 512 Mo fixes en lz4.
+
+# zstd compresse 2 à 3 fois mieux que lz4 pour un surcoût CPU faible :
+# c'est le meilleur rapport compression/CPU pour libérer de la mémoire.
+ALGO=zstd
+
+# Taille du zram : 50 % de la RAM — s'adapte à la machine (2 Go -> 1 Go de
+# zram, 8 Go -> 4 Go), contrairement au SIZE fixe par défaut.
+PERCENT=50
+
+# Priorité du swap zram : plus élevée que tout éventuel swap sur disque.
+PRIORITY=100
