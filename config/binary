@@ -107,7 +107,7 @@ LB_ONIE_KERNEL_CMDLINE=""
 LB_FIRMWARE_BINARY="true"
 
 # Set inclusion of firmware packages in the live image
-LB_FIRMWARE_CHROOT="true"
+LB_FIRMWARE_CHROOT="false"
 
 # Set swap file path
 LB_SWAP_FILE_PATH=""

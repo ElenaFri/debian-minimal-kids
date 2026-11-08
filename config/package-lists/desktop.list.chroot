@@ -10,5 +10,13 @@ x11-xserver-utils
 yaru-theme-gtk
 yaru-theme-icon
 comixcursors-righthanded
+firmware-linux
+firmware-iwlwifi
+firmware-realtek
+firmware-atheros
+firmware-intel-sound
+firmware-sof-signed
+bluez-firmware
+dconf-cli
 zram-tools
 earlyoom

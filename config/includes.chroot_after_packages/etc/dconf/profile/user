@@ -1,0 +1,9 @@
+# =============================================================================
+# Profil dconf « user » — lu par toutes les applications GSettings (gedit, GTK...).
+# Déclare la base système « local » : les défauts compilés depuis
+# /etc/dconf/db/local.d/ s'appliquent à tous les utilisateurs, qui peuvent
+# les surcharger dans leur session.
+# =============================================================================
+
+user-db:user
+system-db:local

@@ -36,6 +36,7 @@ config/hooks/normal/*
 !config/hooks/normal/0500-flatpak-scratch.hook.chroot
 !config/hooks/normal/0510-kids-performance.hook.chroot
 !config/hooks/normal/0520-grub-timeout.binary
+!config/hooks/normal/0530-dconf-defaults.hook.chroot
 
 # Downloaded packages and generated filesystem
 cache/

@@ -1,0 +1,10 @@
+# =============================================================================
+# Défauts système dconf (compilés par le hook 0530-dconf-defaults.hook.chroot).
+# Ces valeurs servent de défauts pour tous les utilisateurs ; chacun peut
+# les changer dans sa session (ce ne sont pas des verrous).
+# =============================================================================
+
+# gedit : surligner les mots mal orthographiés dès l'ouverture (le plugin
+# « spell » est actif par défaut, mais le surlignage démarre à false).
+[org/gnome/gedit/plugins/spell]
+highlight-misspelled=true

@@ -1,63 +1,43 @@
 # debian-minimal-kids
 
 Un système GNU/Linux minimaliste basé sur Debian, pensé pour les enfants :
-simplicité, autonomie et informatique intentionnelle. Moins de superflu, plus
-d'exploration.
+simplicité, autonomie et initiation à l'informatique.
 
 ![Default desktop](screenshots/default_desktop.png)
 
 Construit avec [`live-build`](https://wiki.debian.org/DebianLive) à partir de
-**Debian 13 « trixie »** (stable).
+Debian 13 « trixie » (stable). Le bureau XFCE est en français, avec un
+ensemble d'applications et de jeux en cours de constitution, ajoutés au fil
+des choix du projet.
 
-> État actuel : **base Debian fonctionnelle avec bureau XFCE**, en **français**,
-> avec un ensemble d'applications et de jeux (essentiellement GTK) en cours de
-> constitution. Les logiciels sont ajoutés un par un, au fur et à mesure des
-> choix du projet.
+Applications : Firefox, LibreOffice (texte & présentation), Gedit, Thunar,
+VLC, Drawing, Galculator, Atril (PDF), Scratch (via Flathub).
+Jeux : Glpieces, Atomix, 2048, Swell Foop.
 
-## Prérequis
+## Construire
 
-La construction de l'ISO nécessite `live-build` sur la machine hôte (Debian ou
-dérivé : Debian, Ubuntu, LMDE...) :
+Prérequis sur la machine hôte : `live-build` et `debootstrap` (Debian, Ubuntu,
+LMDE...).
 
 ```bash
-sudo apt update
 sudo apt install live-build debootstrap
-```
-
-## Construire l'ISO
-
-```bash
 ./build.sh          # équivaut à : sudo lb build
+./clean.sh          # repartir de zéro (garde le cache des paquets)
 ```
 
-La première construction télécharge la base Debian et peut prendre un moment.
-Le résultat est un fichier `debian-minimal-kids-amd64.hybrid.iso` à la racine du
-projet, que l'on peut tester dans une machine virtuelle, graver, ou écrire sur
-une clé USB.
+Le résultat est `debian-minimal-kids-amd64.hybrid.iso` à la racine du projet.
+Au démarrage du live : bureau XFCE en session automatique (`lisa` sur
+`kids-pc`), en français (clavier AZERTY, fuseau Europe/Paris).
 
-Au démarrage, le système ouvre directement le **bureau XFCE** en session
-automatique, en **français** (clavier AZERTY, fuseau Europe/Paris), avec
-l'utilisateur **`lisa`** (hôte `kids-pc`). C'est le cadre propre à enrichir
-ensuite.
-
-Pour repartir de zéro :
+## Tester dans QEMU
 
 ```bash
-./clean.sh          # supprime les artefacts (garde le cache des paquets)
-```
-
-## Tester le live en machine virtuelle (QEMU)
-
-```bash
-sudo apt install qemu-system-x86
 qemu-system-x86_64 -enable-kvm -m 2048 -smp 2 \
   -cdrom debian-minimal-kids-amd64.hybrid.iso -boot d
 ```
 
-Si `/dev/kvm` est absent, retirez `-enable-kvm` (VM plus lente, mais fonctionnelle).
-
-Pour tester aussi **l'installation sur disque**, créez un disque virtuel et
-démarrez l'ISO dessus :
+Sans `/dev/kvm`, retirer `-enable-kvm`. Pour tester aussi l'installation sur
+disque :
 
 ```bash
 qemu-img create -f qcow2 kids-test.qcow2 20G
@@ -66,191 +46,140 @@ qemu-system-x86_64 -enable-kvm -m 2048 -smp 2 \
   -cdrom debian-minimal-kids-amd64.hybrid.iso -boot d
 ```
 
-Choisissez l'entrée **Install** du menu de démarrage. Une fois l'installation
-terminée, relancez **sans `-cdrom`** pour démarrer le système installé.
+Choisir l'entrée Install du menu de démarrage, puis relancer sans `-cdrom`
+pour démarrer le système installé.
 
-## Scratch (via Flatpak)
+## Le bureau
 
-Scratch n'est pas packagé dans Debian. Il est installé depuis Flathub pendant le
-build par le hook `config/hooks/normal/0500-flatpak-scratch.hook.chroot` (le
-paquet `flatpak` est déclaré dans `apps.list.chroot`).
+Tout est défini dans `etc/skel/.config/` (via
+`config/includes.chroot_after_packages/`), donc identique sur le live et sur
+le système installé. Pour ajuster : modifier le bureau dans la session live,
+puis recopier `~/.config/` modifié dans `etc/skel/` du dépôt.
 
-> Contrepartie : Scratch tire un runtime GNOME volumineux (plusieurs centaines de
-> Mo), ce qui **augmente la taille de l'ISO**. Les performances à l'usage restent
-> correctes.
+- Panneau du bas (36 px) semi-transparent — teinte nuit à 55 %, texte blanc
+  forcé par `gtk-3.0/gtk.css` pour la lisibilité : bouton Menu (icône
+  `kids-menu-globe`, libellé « Menu »), bureaux, fenêtres, puis zone de
+  notification et horloge épinglées à droite par un séparateur extensible.
+  Des séparateurs transparents entre Menu et les bureaux, et en bout de
+  panneau, donnent du « souffle ». L'horloge affiche
+  « 7 novembre 2026, 22h 29 » (`%-d %B %Y, %Hh %M`, interprété par GLib).
+- Dock vertical à gauche (48 px), transparent, ajusté à ses icônes :
+  Firefox, Gedit, Scratch, Dessin, VLC, Thunar.
+- Thème Yaru-magenta (GTK et icônes, paquets `yaru-theme-gtk` et
+  `yaru-theme-icon`) ; bordures de fenêtres Yaru (les variantes colorées
+  n'embarquent pas de décorations xfwm4) ; pointeur ComixCursors-Orange.
+- Bureau sans icônes, fond d'écran « chat endormi à la bougie ».
+- Thunar s'ouvre en vue liste par défaut (`thunar.xml` :
+  `default-view` = `ThunarDetailsView`).
+- Correcteur orthographique français : dictionnaires `hunspell-fr` +
+  `hyphen-fr` installés (LibreOffice, gedit et Firefox les lisent) ; le
+  surlignage de gedit est activé par défaut via un défaut système dconf
+  (`etc/dconf/db/local.d/`). LibreOffice souligne automatiquement (fonction
+  active d'origine, langue du document suivant la locale).
 
-## Bureau XFCE par défaut
+Détail des fichiers XFCE : disposition des panneaux et plugins dans
+`xfce4-panel.xml` (chaque lanceur du dock est dans
+`panel/launcher-<id>/`, le numéro correspond au plugin) ; thème GTK, icônes
+et pointeur dans `xsettings.xml` ; bordures et compositeur dans `xfwm4.xml`
+(nécessaire à la transparence) ; bureau sans icônes dans
+`xfce4-desktop.xml`.
 
-Le bureau livré par défaut est défini dans
-`config/includes.chroot_after_packages/etc/skel/.config/xfce4/` :
+### Fond d'écran : comment ça marche
 
-- un **panneau horizontal en bas** (36 px), **semi-transparent** (teinte nuit
-  à 55 % d'opacité via `background-rgba`) avec **texte blanc forcé par
-  `~/.config/gtk-3.0/gtk.css`** — le fond d'écran reste visible tout en
-  garantissant la lisibilité : bouton Menu, bureaux, liste des fenêtres,
-  zone de notification, et une horloge affichant la date complète au format
-  « 7 novembre 2026, 22h 29 » (`digital-time-format` = `%-d %B %Y, %Hh %M`,
-  interprété par GLib) ;
-- un **dock vertical à gauche** (48 px), centré, **transparent** et **ajusté à
-  la taille de ses icônes**, avec six lanceurs, dans l'ordre : Firefox, Gedit,
-  Scratch, Dessin, VLC, Thunar ;
-- un **bouton Menu à globe violet** : le menu des applications du panneau
-  affiche l'icône `kids-menu-globe` (SVG fourni dans
-  `usr/share/icons/hicolor/scalable/apps/`, résolu via le thème de repli
-  hicolor) accompagnée du libellé « Menu » (propriétés `button-icon` et
-  `button-title` du plugin dans `xfce4-panel.xml`) ;
-- un **bureau sans icônes** (fond d'écran seul) ;
-- un **thème clair et chaleureux** : GTK **Yaru-magenta** (accent magenta,
-  paquet `yaru-theme-gtk`), bordures de fenêtres **Yaru** (chrome neutre : les
-  variantes colorées n'embarquent pas de bordures xfwm4), icônes
-  **Yaru-magenta** (paquet `yaru-theme-icon`, dossiers magenta héritant du jeu
-  Yaru complet) ;
-- un **pointeur de souris** style bande dessinée, orange : **ComixCursors-Orange**
-  (paquet `comixcursors-righthanded`, réglé dans `xsettings.xml` via
-  `Gtk/CursorThemeName`) ;
-- un **fond d'écran** doux (un chat endormi à la bougie), installé dans
-  `/usr/share/backgrounds/debian-minimal-kids/wallpaper.jpg`.
+xfdesktop 4.20 range le fond sous une clé xfconf qui dépend du connecteur
+réel du moniteur (`Virtual-1` en QEMU, `eDP-1`/`HDMI-1` sur du matériel) —
+impossible à figer dans un XML. À la place, deux mécanismes complémentaires :
 
-La disposition des panneaux est décrite dans `xfce4-panel.xml`. Chaque lanceur
-du dock a son fichier `.desktop` dans un sous-dossier dédié `panel/launcher-<id>/`
-(le numéro `<id>` correspond au plugin dans `xfce4-panel.xml`, c'est l'endroit où
-le panneau XFCE va chercher ses lanceurs). Le masquage des icônes du bureau est
-réglé dans `xfce4-desktop.xml`, le thème GTK et les icônes dans `xsettings.xml`,
-le thème des fenêtres dans `xfwm4.xml` (qui active aussi le compositeur
-nécessaire à la transparence du dock).
+1. `usr/share/backgrounds/xfce/xfce-x.svg` est un lien symbolique vers notre
+   image (`wallpaper.jpg`). Sans clé xfconf, xfdesktop affiche cette image
+   par défaut sur tous les moniteurs, en remplissant l'écran (le format est
+   détecté par le contenu, l'extension est sans importance).
+2. `kids-set-wallpaper` (autostart de session) pose la clé `last-image` sur
+   les moniteurs connectés : le choix est reflété dans l'outil « Bureau » et
+   survit aux mises à jour du paquet `xfdesktop4-data`. Sans effet si un
+   fond a déjà été choisi.
 
-Le **fond d'écran** mérite une explication. xfdesktop 4.20 range le fond choisi
-sous une clé xfconf qui dépend du nom du connecteur réel du moniteur (`Virtual-1`
-en QEMU, `eDP-1`/`HDMI-1` sur du matériel), impossible à figer dans un XML. Et
-quand aucune image n'est définie, xfdesktop affiche son **image par défaut**
-compilée, `DEFAULT_BACKDROP` = `/usr/share/backgrounds/xfce/xfce-x.svg` (fournie
-par le paquet `xfdesktop4-data`), avec les styles par défaut *zoomé* +
-*transparent*.
+## Optimisations
 
-On s'appuie sur ce comportement, de deux façons complémentaires :
+Mémoire et réactivité :
 
-1. **Image par défaut remplacée** (mécanisme principal, infaillible) :
-   `/usr/share/backgrounds/xfce/xfce-x.svg` est un **lien symbolique** vers notre
-   image (`usr/share/backgrounds/xfce/xfce-x.svg` → `../debian-minimal-kids/wallpaper.jpg`).
-   Dès lors, sans aucune clé xfconf ni course au démarrage, le bureau affiche
-   notre chat — sur tous les moniteurs et toutes les résolutions (xfdesktop le
-   charge par son contenu, l'extension `.svg` est sans importance). Le fond
-   remplit l'écran en gardant les proportions (style *zoomé* par défaut).
-2. **Script d'ouverture de session** (complément) :
-   `/usr/local/bin/kids-set-wallpaper`, lancé via
-   `~/.config/autostart/kids-set-wallpaper.desktop`, détecte les moniteurs
-   connectés et pose explicitement la clé `last-image`. Intérêt : le choix est
-   reflété dans l'outil « Bureau » de XFCE et **survit à une mise à jour** du
-   paquet `xfdesktop4-data` (qui restaurerait sinon `xfce-x.svg`). Le script ne
-   touche à rien si un fond a déjà été choisi, pour conserver les changements
-   manuels sur un système installé (le mode « même fond sur tous les bureaux »
-   est réglé dans `xfce4-desktop.xml`).
+- zram (`zram-tools`) : swap compressé en RAM — zstd, 50 % de la RAM
+  (`etc/default/zramswap`), avec `vm.swappiness = 100` et
+  `vm.page-cluster = 0` (`etc/sysctl.d/99-kids-zram.conf`).
+- earlyoom : termine proprement le processus le plus gourmand avant le gel
+  complet de la machine.
+- ModemManager et NetworkManager-wait-online masqués (hook
+  `0510-kids-performance.hook.chroot`, qui garantit aussi que zramswap et
+  earlyoom sont actifs).
 
-Le thème GTK et les icônes sont réglés dans `xsettings.xml`, le thème des
-fenêtres dans `xfwm4.xml` (qui active aussi le compositeur nécessaire à la
-transparence du dock), le masquage des icônes du bureau dans `xfce4-desktop.xml`.
+Démarrage :
 
-Ces fichiers sont déposés dans `/etc/skel` : chaque nouvelle session — le live
-comme un système fraîchement installé — hérite du même bureau. Pour ajuster le
-rendu, le plus simple est de modifier le bureau graphiquement dans la session
-live, puis de recopier `~/.config/xfce4/` modifié dans `etc/skel/` du dépôt.
-
-## Optimisations système
-
-Pour gagner en réactivité et économiser mémoire et CPU, sans ajouter de
-complexité :
-
-- **zram** (paquet `zram-tools`) : swap compressé **dans la RAM**. C'est
-  l'optimisation la plus efficace sur les machines modestes : sous pression
-  mémoire, le système compresse les pages inactives au lieu de ramer sur le
-  disque. Configuré en **zstd** et **50 % de la RAM** (`etc/default/zramswap`),
-  accompagné de `vm.swappiness = 100` et `vm.page-cluster = 0`
-  (`etc/sysctl.d/99-kids-zram.conf`).
-- **earlyoom** : si la mémoire est réellement saturée, il termine proprement
-  le processus le plus gourmand (en pratique le navigateur) au lieu de laisser
-  la machine se figer — un navigateur fermé se rouvre, une machine gelée
-  réclame un redémarrage forcé.
-- **ModemManager masqué** (hook `0510-kids-performance.hook.chroot`) : ce
-  service — installé via les « Recommends » de NetworkManager — sonde
-  périodiquement des modems 3G/4G absents de la machine cible. Le masquer
-  économise ~10 Mo de RAM et des réveils CPU, sans impact sur le wifi ni
-  l'Ethernet. Le même hook garantit que `zramswap` et `earlyoom` sont actifs.
-
-Délibérément **non** installés : `preload` (bénéfice non prouvé, consomme
-lui-même de la RAM), `irqbalance` (marginal sur 2-4 cœurs), TLP (batterie,
-pas CPU/RAM). Le système étant déjà minimal, les vrais gros consommateurs
-restent les applications elles-mêmes (Firefox, LibreOffice).
-
-## Temps de démarrage
-
-- **Squashfs en zstd** (`--chroot-squashfs-compression-type zstd` dans
-  `auto/config`) : le système live est décompressé ~5-10× plus vite qu'avec
-  le xz par défaut — c'est le principal poste du démarrage d'un live USB.
-  Contrepartie : ISO ~10 % plus grosse (≈ 3,3 Go).
-- **Menu GRUB (UEFI) : 3 s** (hook `0520-grub-timeout.binary`). Corrige au
-  passage un vrai bug : sans `set timeout`, GRUB attend **indéfiniment** une
-  touche — l'ISO ne démarrait pas toute seule sur les machines UEFI (invisible
-  dans nos tests QEMU, qui passent par le BIOS/isolinux, où `timeout 0` boote
-  immédiatement).
-- **NetworkManager-wait-online masqué** (hook `0510`) : aucun service n'a
-  besoin du réseau dès le boot sur ce bureau.
-- **GRUB_TIMEOUT = 1 s sur le système installé** (`preseed.cfg`, contre 5 s
-  par défaut) via `preseed/late_command`.
+- Squashfs en zstd (`auto/config`) : décompression ~5-10× plus rapide que le
+  xz par défaut — principal poste du boot d'un live USB. Contrepartie :
+  ISO ~10 % plus grosse (≈ 3,3 Go).
+- Menu GRUB UEFI limité à 3 s (hook `0520-grub-timeout.binary`). Corrige un
+  vrai bug : sans `set timeout`, GRUB attend indéfiniment une touche — le
+  live ne démarrait pas seul sur les machines UEFI (invisible en test QEMU,
+  qui passe par le BIOS où `timeout 0` boote immédiatement).
+- GRUB_TIMEOUT = 1 s sur le système installé (`preseed.cfg`), contre 5 s par
+  défaut.
 - L'initrd est déjà optimal : préfixe microcode (cpio brut, standard Debian)
-  + archive principale **zstd** (défaut de trixie), vérifié dans l'ISO.
+  puis archive principale zstd (défaut de trixie), vérifié dans l'ISO.
 
-Après un build, affiner au réel : `systemd-analyze` (chaîne critique) dans
-la session live ou installée.
+Délibérément non installés : `preload` (bénéfice non prouvé, consomme de la
+RAM), `irqbalance` (marginal sur 2-4 cœurs), TLP (batterie, pas CPU/RAM).
+Les vrais gros consommateurs restent les applications (Firefox,
+LibreOffice). Après un build, affiner au réel avec `systemd-analyze`.
+
+## Scratch
+
+Scratch n'est pas packagé dans Debian : il est installé depuis Flathub
+pendant le build (hook `0500-flatpak-scratch.hook.chroot`, paquet `flatpak`
+déclaré dans `apps.list.chroot`). Contrepartie : le runtime GNOME requis
+augmente sensiblement la taille de l'ISO.
 
 ## Structure du projet
 
 | Chemin | Rôle |
 |--------|------|
-| `auto/config` | Options de `lb config` figées => **build reproductible** (langue, clavier, utilisateur...) |
-| `config/package-lists/live.list.chroot` | Composants minimaux du système live (généré) |
-| `config/package-lists/locale.list.chroot` | Prise en charge du français (locale + clavier) |
-| `config/package-lists/desktop.list.chroot` | Bureau XFCE + infrastructure (réseau, son) + thème (Yaru-magenta : GTK et icônes, curseurs Comix) + optimisations (zram, earlyoom) |
-| `config/package-lists/apps.list.chroot` | Applications (ajoutées au fur et à mesure) |
+| `auto/config` | Options `lb config` figées : build reproductible |
+| `config/package-lists/live.list.chroot` | Composants minimaux du live |
+| `config/package-lists/locale.list.chroot` | Français : locale, clavier, dictionnaires (hunspell, hyphen), interfaces FR (LibreOffice, Firefox) |
+| `config/package-lists/desktop.list.chroot` | XFCE, réseau, son, thème Yaru-magenta, curseurs, firmwares courants (Intel, Realtek, Atheros, SOF), dconf-cli, zram, earlyoom |
+| `config/package-lists/apps.list.chroot` | Applications |
 | `config/package-lists/games.list.chroot` | Jeux |
-| `config/includes.installer/preseed.cfg` | Préconfiguration de l'installateur (français par défaut) |
-| `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Installe Scratch via Flatpak pendant le build |
-| `config/hooks/normal/0510-kids-performance.hook.chroot` | Active zramswap + earlyoom, masque ModemManager et NM-wait-online |
-| `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s (corrige l'attente infinie sans timeout) |
-| `config/includes.chroot_after_packages/etc/skel/` | Configuration XFCE par défaut (panneaux, lanceurs, thème, autostart) |
-| `config/includes.chroot_after_packages/usr/share/backgrounds/debian-minimal-kids/` | Fond d'écran par défaut |
-| `config/includes.chroot_after_packages/usr/share/icons/hicolor/scalable/apps/kids-menu-globe.svg` | Icône « globe violet » du bouton Menu |
-| `config/includes.chroot_after_packages/etc/skel/.config/gtk-3.0/gtk.css` | Texte blanc + ombre sur le panneau XFCE (lisibilité sur fond transparent) |
-| `config/includes.chroot_after_packages/etc/default/zramswap` | zram : compression zstd, taille = 50 % de la RAM |
-| `config/includes.chroot_after_packages/etc/sysctl.d/99-kids-zram.conf` | `vm.swappiness` et `vm.page-cluster` accordés à zram |
-| `config/includes.chroot_after_packages/usr/share/backgrounds/xfce/xfce-x.svg` | Lien vers notre fond : remplace l'image par défaut de xfdesktop |
-| `config/includes.chroot_after_packages/usr/local/bin/kids-set-wallpaper` | Pose `last-image` sur chaque moniteur à l'ouverture de session (complément) |
+| `config/includes.installer/preseed.cfg` | Installateur en français, GRUB_TIMEOUT=1 |
+| `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Scratch via Flathub |
+| `config/hooks/normal/0510-kids-performance.hook.chroot` | zram + earlyoom actifs, ModemManager et NM-wait-online masqués |
+| `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
+| `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf (surlignage orthographique gedit) |
+| `config/includes.chroot_after_packages/etc/dconf/` | Profil dconf + défauts système (gedit : correcteur actif) |
+| `config/includes.chroot_after_packages/etc/skel/` | Config XFCE, Thunar, GTK (panneaux, thème, gtk.css) |
+| `config/includes.chroot_after_packages/etc/default/zramswap` | zram : zstd, 50 % de la RAM |
+| `config/includes.chroot_after_packages/etc/sysctl.d/99-kids-zram.conf` | `vm.swappiness`, `vm.page-cluster` |
+| `config/includes.chroot_after_packages/usr/share/backgrounds/` | Fond d'écran + lien `xfce-x.svg` |
+| `config/includes.chroot_after_packages/usr/share/icons/hicolor/scalable/apps/kids-menu-globe.svg` | Icône du bouton Menu |
+| `config/includes.chroot_after_packages/usr/local/bin/kids-set-wallpaper` | Pose `last-image` à l'ouverture de session |
 | `build.sh` / `clean.sh` | Scripts pratiques |
 
 ## Réglages par défaut
 
 | Paramètre | Valeur |
 |-----------|--------|
-| Langue (locale) | `fr_FR.UTF-8` |
+| Langue | `fr_FR.UTF-8` |
 | Clavier | `fr` (AZERTY) |
-| Fuseau horaire | `Europe/Paris` |
+| Fuseau | `Europe/Paris` |
 | Utilisateur | `lisa` |
-| Nom de machine | `kids-pc` |
+| Machine | `kids-pc` |
 
-Ces valeurs sont définies dans `auto/config` (paramètres `live-config.*`).
-
-Le **français est également le défaut de l'installateur** (installation sur
-disque) : langue, clavier AZERTY et fuseau Europe/Paris sont préconfigurés via
-`config/includes.installer/preseed.cfg` et les paramètres de démarrage
+Définis dans `auto/config` (paramètres `live-config.*`). L'installateur est
+également préconfiguré en français : `preseed.cfg` et les paramètres
 `--bootappend-install` d'`auto/config`.
 
 ## Pour la suite
 
-Quand le moment sera venu d'étoffer la distribution :
-
-- **Applications** : les ajouter dans `config/package-lists/apps.list.chroot`,
-  ou créer des listes thématiques (p. ex. `education.list.chroot`).
-- **Réglages, thème, fond d'écran** : déposer ou modifier les fichiers dans
-  `config/includes.chroot_after_packages/` (le thème clair et le fond d'écran y
-  sont déjà en place, voir la section « Bureau XFCE par défaut »).
-- **Personnalisation au démarrage, verrouillage parental** : ajouter des scripts
-  dans `config/hooks/normal/`.
+- Applications : `config/package-lists/apps.list.chroot`, ou listes
+  thématiques (p. ex. `education.list.chroot`).
+- Réglages, thème, fond d'écran : `config/includes.chroot_after_packages/`.
+- Personnalisation au démarrage, verrouillage parental : scripts dans
+  `config/hooks/normal/`.

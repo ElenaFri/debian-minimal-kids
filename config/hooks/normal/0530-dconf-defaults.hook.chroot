@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# =============================================================================
+# debian-minimal-kids — compile les bases dconf système.
+#
+# S'exécute DANS le chroot pendant le build, après la copie des includes
+# (etc/dconf/profile/user + etc/dconf/db/local.d/00-kids-defaults) et après
+# l'installation des paquets (dconf-cli fournit la commande « dconf update »).
+#
+# Sans cette étape, les réglages de /etc/dconf/db/local.d/ ne seraient pas
+# compilés dans la base gdbm que lit libdconf, et n'auraient aucun effet.
+# =============================================================================
+
+set -e
+
+dconf update
