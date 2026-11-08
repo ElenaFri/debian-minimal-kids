@@ -11,7 +11,7 @@ Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/lat
 ![Bureau par défaut](screenshots/default_desktop.png)
 
 Applications : Firefox ESR, LibreOffice (texte, présentation), Gedit, Thunar,
-VLC, Drawing, Galculator, Atril (PDF).
+VLC, Drawing, Galculator, qpdfview (PDF).
 Jeux : Extreme Tux Racer, Luanti, Atomix, 2048, Swell Foop.
 
 ## Construire
@@ -101,8 +101,9 @@ passe admin ; inactif sur le live (connexion automatique).
 - Squashfs zstd niveau 22, menu GRUB UEFI à 3 s (hook 0520), `GRUB_TIMEOUT = 1`
   une fois installé.
 - ISO allégée (hook 0540) : agent polkit léger (lxpolkit) sans la chaîne
-  OpenCV/GDAL, variantes de thèmes/curseurs et traductions superflues purgées,
-  caches apt-file/xapian/plocate non construits.
+  OpenCV/GDAL, PDF via qpdfview au lieu d'atril/yelp (pas de WebKitGTK),
+  variantes de thèmes/curseurs et traductions superflues purgées, caches
+  apt-file/xapian/plocate non construits.
 
 ## Structure du projet
 

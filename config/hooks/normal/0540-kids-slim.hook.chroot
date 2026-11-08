@@ -3,16 +3,19 @@
 # =============================================================================
 # debian-minimal-kids — allègement de l'image (hook chroot, après paquets).
 #
-# Objectif : réduire l'ISO sans retirer la moindre fonctionnalité
-# (aucune application supprimée, aucun matériel non pris en charge).
+# Objectif : réduire l'ISO en ne retirant que du superflu (aucun matériel non
+# pris en charge ; les rares applications retirées sont remplacées à l'identique
+# ou inutiles ici).
 #
-# 1. Dépendances parasites :
+# 1. Dépendances parasites et applications superflues :
 #    - pocketsphinx-en-us : modèles vocaux *anglais* (via gstreamer-plugins-bad)
 #    - mesa-vulkan-drivers : rien chez nous n'utilise Vulkan, OpenGL suffit
 #    - ukui-polkit : apt l'avait choisi pour fournir « polkit-1-auth-agent »
 #      (réclamé par Thunar et network-manager), mais il tire tout OpenCV +
-#      GDAL + PROJ + Qt-polkit (~100 Mio). On le remplace par lxpolkit (léger,
-#      listé dans desktop.list) et on purge ses dépendances orphelines.
+#      GDAL + PROJ + Qt-polkit (~100 Mio). Remplacé par lxpolkit (léger).
+#    - yelp : navigateur d'aide GNOME, superflu pour des enfants et seul (avec
+#      atril, retiré de la liste) à tirer WebKitGTK (~130 Mio) ; qpdfview
+#      (Qt, déjà présent via VLC) le remplace pour les PDF.
 # 2. Système 100 % français : on ne garde que les traductions fr/en/C
 #    (locales, docs, pages de man, aide yelp, traductions Qt).
 # 3. Thèmes/curseurs : on ne garde que ceux réellement appliqués (Yaru-magenta
@@ -23,14 +26,17 @@
 
 set -e
 
-# --- 1. Dépendances parasites ------------------------------------------------
+# --- 1. Dépendances parasites et applications superflues ---------------------
 apt-get -y purge pocketsphinx-en-us mesa-vulkan-drivers
 
-# Agent polkit : lxpolkit (installé via la liste) remplace ukui-polkit.
-if dpkg-query -W -f='${Status}' ukui-polkit 2>/dev/null | grep -q '^install'; then
-    apt-get -y purge ukui-polkit
-fi
-# Supprime toutes les dépendances devenues orphelines (OpenCV, GDAL, PROJ…).
+# lxpolkit remplace ukui-polkit ; qpdfview remplace atril (donc yelp, dernier
+# utilisateur de WebKitGTK, devient superflu). On purge, puis autoremove nettoie
+# les orphelins (OpenCV, GDAL, PROJ, WebKitGTK…).
+for pkg in ukui-polkit yelp; do
+    if dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q '^install'; then
+        apt-get -y purge "$pkg"
+    fi
+done
 apt-get -y --purge autoremove
 
 # --- 2. Traductions : fr / en / C uniquement ---------------------------------
@@ -68,10 +74,6 @@ find /usr/share/themes -maxdepth 1 -type d -name 'Yaru-*' \
     ! -name 'Yaru-magenta' ! -name 'Yaru-magenta-dark' -exec rm -rf {} +
 find /usr/share/icons -maxdepth 1 -type d -name 'Yaru-*' \
     ! -name 'Yaru-magenta' ! -name 'Yaru-magenta-dark' -exec rm -rf {} +
-
-# MathJax (~41 Mio) : dépendance d'atril servant au rendu des maths dans les
-# ebooks ; inutile pour la simple lecture de PDF — on ne garde que le moteur.
-rm -rf /usr/share/javascript/mathjax
 
 # --- 4. Caches apt -----------------------------------------------------------
 apt-get clean
