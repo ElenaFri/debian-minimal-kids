@@ -13,7 +13,8 @@
 #      (réclamé par Thunar et network-manager), mais il tire tout OpenCV +
 #      GDAL + PROJ + Qt-polkit (~100 Mio). On le remplace par lxpolkit (léger,
 #      listé dans desktop.list) et on purge ses dépendances orphelines.
-# 2. Système 100 % français : on ne garde que les traductions fr/en/C.
+# 2. Système 100 % français : on ne garde que les traductions fr/en/C
+#    (locales, docs, pages de man, aide yelp, traductions Qt).
 # 3. Thèmes/curseurs : on ne garde que ceux réellement appliqués (Yaru-magenta
 #    + pointeur ComixCursors-Orange) ; les autres variantes de couleur sont
 #    supprimées (~130 Mio non compressés).
@@ -42,6 +43,18 @@ find /usr/share/doc -mindepth 1 -type d -empty -delete
 
 find /usr/share/man -mindepth 1 -maxdepth 1 -type d \
     ! -name 'man*' ! -name 'fr' -exec rm -rf {} +
+
+# Aide GNOME/XFCE (yelp) : seulement C (anglais de base) et fr.
+if [ -d /usr/share/help ]; then
+    find /usr/share/help -mindepth 1 -maxdepth 1 -type d \
+        ! -name 'C' ! -name 'fr*' -exec rm -rf {} +
+fi
+
+# Traductions Qt (VLC…) : seulement fr/en.
+if [ -d /usr/share/qt5/translations ]; then
+    find /usr/share/qt5/translations -type f -name '*.qm' \
+        ! -name '*_fr*' ! -name '*_en*' -delete
+fi
 
 # --- 3. Thèmes et curseurs non utilisés --------------------------------------
 # Pointeur : seul ComixCursors-Orange est appliqué (voir xsettings.xml).
