@@ -1,5 +1,6 @@
 xorg
 xfce4
+xfce4-screensaver
 dbus-x11
 lightdm
 lightdm-gtk-greeter

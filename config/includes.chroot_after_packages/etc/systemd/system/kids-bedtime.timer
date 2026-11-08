@@ -1,0 +1,14 @@
+[Unit]
+Description=Couvre-feu debian-minimal-kids (extinction 21h30)
+Documentation=file:///usr/share/doc/debian-minimal-kids/README.md
+
+[Timer]
+# Tous les jours à 21h30.
+OnCalendar=*-*-* 21:30:00
+# Persistent=false (volontaire) : si la machine démarre après 21h30,
+# elle ne s'endort pas immédiatement — le couvre-feu reprend le lendemain.
+# Évite qu'un parent testant l'image le soir croie qu'elle est cassée.
+Persistent=false
+
+[Install]
+WantedBy=timers.target

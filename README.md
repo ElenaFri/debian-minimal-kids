@@ -132,6 +132,36 @@ RAM), `irqbalance` (marginal sur 2-4 cœurs), TLP (batterie, pas CPU/RAM).
 Les vrais gros consommateurs restent les applications (Firefox,
 LibreOffice). Après un build, affiner au réel avec `systemd-analyze`.
 
+## Contrôle parental
+
+Trois mesures intégrées d'origine, pensées pour un jeune enfant :
+
+1. DNS familial : toutes les connexions (Ethernet, wifi) passent par
+   OpenDNS FamilyShield (`etc/NetworkManager/conf.d/99-kids-dns.conf`),
+   qui bloque les sites pour adultes et le phishing. Les DNS du DHCP sont
+   ignorés, y compris en IPv6 — l'enfant ne peut pas contourner le filtrage
+   depuis l'applet réseau.
+2. Firefox verrouillé (`etc/firefox/policies/policies.json`) : le DNS sur
+   HTTPS (DoH) est désactivé et verrouillé — sinon il contournerait le DNS
+   familial — et l'accès à `about:config` est bloqué. La navigation elle-même
+   est strictement normale.
+3. Couvre-feu : un timer systemd suspend la machine tous les jours à 21h30
+   (`etc/systemd/system/kids-bedtime.*`, activé par le hook
+   `0510-kids-performance.hook.chroot`). Au réveil, la session est
+   verrouillée : il faut le mot de passe de `lisa` (xfce4-screensaver,
+   clé `/lock/sleep-activation`). L'écran ne se verrouille jamais sur simple
+   inactivité — seul le couvre-feu verrouille.
+
+Changer l'heure : éditer `OnCalendar` dans `kids-bedtime.timer` puis
+`sudo systemctl daemon-reload && sudo systemctl restart kids-bedtime.timer`.
+Désactiver : `sudo systemctl disable --now kids-bedtime.timer`.
+
+Limites : tout cela est contournable avec le mot de passe
+administrateur (c'est un cadre, pas une cage), le couvre-feu ne s'applique
+pas à la session live (connexion automatique sans mot de passe), et une
+machine démarrée après 21h30 ne s'endort pas avant le lendemain
+(`Persistent=false` assumé).
+
 ## Scratch
 
 Scratch n'est pas packagé dans Debian : il est installé depuis Flathub
@@ -151,10 +181,13 @@ augmente sensiblement la taille de l'ISO.
 | `config/package-lists/games.list.chroot` | Jeux |
 | `config/includes.installer/preseed.cfg` | Installateur en français, GRUB_TIMEOUT=1 |
 | `config/hooks/normal/0500-flatpak-scratch.hook.chroot` | Scratch via Flathub |
-| `config/hooks/normal/0510-kids-performance.hook.chroot` | zram + earlyoom actifs, ModemManager et NM-wait-online masqués |
+| `config/hooks/normal/0510-kids-performance.hook.chroot` | zram + earlyoom actifs, ModemManager et NM-wait-online masqués, timer de couvre-feu activé |
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
 | `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf (surlignage orthographique gedit) |
 | `config/includes.chroot_after_packages/etc/dconf/` | Profil dconf + défauts système (gedit : correcteur actif) |
+| `config/includes.chroot_after_packages/etc/NetworkManager/conf.d/` | DNS familial OpenDNS FamilyShield |
+| `config/includes.chroot_after_packages/etc/firefox/policies/` | Politiques Firefox : DoH verrouillé, about:config bloqué |
+| `config/includes.chroot_after_packages/etc/systemd/system/kids-bedtime.*` | Couvre-feu 21h30 (timer + service de suspension) |
 | `config/includes.chroot_after_packages/etc/skel/` | Config XFCE, Thunar, GTK (panneaux, thème, gtk.css) |
 | `config/includes.chroot_after_packages/etc/default/zramswap` | zram : zstd, 50 % de la RAM |
 | `config/includes.chroot_after_packages/etc/sysctl.d/99-kids-zram.conf` | `vm.swappiness`, `vm.page-cluster` |
@@ -182,5 +215,5 @@ Définis dans `auto/config` (paramètres `live-config.*`). L'installateur est
 - Applications : `config/package-lists/apps.list.chroot`, ou listes
   thématiques (p. ex. `education.list.chroot`).
 - Réglages, thème, fond d'écran : `config/includes.chroot_after_packages/`.
-- Personnalisation au démarrage, verrouillage parental : scripts dans
+- Personnalisation au démarrage : scripts dans
   `config/hooks/normal/`.

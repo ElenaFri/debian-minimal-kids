@@ -1,0 +1,10 @@
+[Unit]
+Description=Couvre-feu debian-minimal-kids — mise en veille
+Documentation=file:///usr/share/doc/debian-minimal-kids/README.md
+# Suspendre déclenche le signal logind PrepareForSleep : xfce4-screensaver
+# verrouille alors l'écran (clé xfconf /lock/sleep-activation) avant que la
+# machine ne s'endorme. Au réveil, la session demande le mot de passe.
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl suspend
