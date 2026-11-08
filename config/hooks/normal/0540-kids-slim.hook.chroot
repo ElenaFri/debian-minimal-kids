@@ -3,24 +3,34 @@
 # =============================================================================
 # debian-minimal-kids — allègement de l'image (hook chroot, après paquets).
 #
-# Objectif : garder l'ISO sous la limite de 2 Gio de GitHub, sans retirer la
-# moindre fonctionnalité (aucun paquet applicatif supprimé).
+# Objectif : réduire l'ISO sans retirer la moindre fonctionnalité
+# (aucune application supprimée, aucun matériel non pris en charge).
 #
-# 1. Purge de « Recommends » inutiles ici :
-#    pocketsphinx-en-us (modèles vocaux *anglais*, via gstreamer-plugins-bad)
-#    et mesa-vulkan-drivers (rien chez nous n'utilise Vulkan, OpenGL suffit).
+# 1. Dépendances parasites :
+#    - pocketsphinx-en-us : modèles vocaux *anglais* (via gstreamer-plugins-bad)
+#    - mesa-vulkan-drivers : rien chez nous n'utilise Vulkan, OpenGL suffit
+#    - ukui-polkit : apt l'avait choisi pour fournir « polkit-1-auth-agent »
+#      (réclamé par Thunar et network-manager), mais il tire tout OpenCV +
+#      GDAL + PROJ + Qt-polkit (~100 Mio). On le remplace par lxpolkit (léger,
+#      listé dans desktop.list) et on purge ses dépendances orphelines.
 # 2. Système 100 % français : on ne garde que les traductions fr/en/C.
-#    - /usr/share/locale : suppression des autres langues (~48 Mio compressés)
-#    - /usr/share/doc    : on ne garde que les fichiers « copyright » (licences
-#      requises par la Debian Policy), ~44 Mio compressés
-#    - /usr/share/man    : on ne garde que l'anglais (sections manN) et le fr
-# 3. Nettoyage des caches apt (~270 Mo), régénérés au premier « apt update ».
+# 3. Thèmes/curseurs : on ne garde que ceux réellement appliqués (Yaru-magenta
+#    + pointeur ComixCursors-Orange) ; les autres variantes de couleur sont
+#    supprimées (~130 Mio non compressés).
+# 4. Caches apt (~270 Mo), régénérés au premier « apt update ».
 # =============================================================================
 
 set -e
 
-# --- 1. Recommends superflus -------------------------------------------------
+# --- 1. Dépendances parasites ------------------------------------------------
 apt-get -y purge pocketsphinx-en-us mesa-vulkan-drivers
+
+# Agent polkit : lxpolkit (installé via la liste) remplace ukui-polkit.
+if dpkg-query -W -f='${Status}' ukui-polkit 2>/dev/null | grep -q '^install'; then
+    apt-get -y purge ukui-polkit
+fi
+# Supprime toutes les dépendances devenues orphelines (OpenCV, GDAL, PROJ…).
+apt-get -y --purge autoremove
 
 # --- 2. Traductions : fr / en / C uniquement ---------------------------------
 find /usr/share/locale -mindepth 1 -maxdepth 1 -type d \
@@ -33,7 +43,24 @@ find /usr/share/doc -mindepth 1 -type d -empty -delete
 find /usr/share/man -mindepth 1 -maxdepth 1 -type d \
     ! -name 'man*' ! -name 'fr' -exec rm -rf {} +
 
-# --- 3. Caches apt -----------------------------------------------------------
+# --- 3. Thèmes et curseurs non utilisés --------------------------------------
+# Pointeur : seul ComixCursors-Orange est appliqué (voir xsettings.xml).
+rm -rf /usr/share/icons/Yaru/cursors
+find /usr/share/icons -maxdepth 1 -type d -name 'ComixCursors-*' \
+    ! -name 'ComixCursors-Orange' -exec rm -rf {} +
+
+# Thème GTK/icônes : seul Yaru-magenta (+ variante sombre) est appliqué ; on
+# conserve la base « Yaru » (bordures de fenêtres xfwm4 + parent d'héritage).
+find /usr/share/themes -maxdepth 1 -type d -name 'Yaru-*' \
+    ! -name 'Yaru-magenta' ! -name 'Yaru-magenta-dark' -exec rm -rf {} +
+find /usr/share/icons -maxdepth 1 -type d -name 'Yaru-*' \
+    ! -name 'Yaru-magenta' ! -name 'Yaru-magenta-dark' -exec rm -rf {} +
+
+# MathJax (~41 Mio) : dépendance d'atril servant au rendu des maths dans les
+# ebooks ; inutile pour la simple lecture de PDF — on ne garde que le moteur.
+rm -rf /usr/share/javascript/mathjax
+
+# --- 4. Caches apt -----------------------------------------------------------
 apt-get clean
 rm -f /var/cache/apt/pkgcache.bin /var/cache/apt/srcpkgcache.bin
 rm -rf /var/lib/apt/lists/*

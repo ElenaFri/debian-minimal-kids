@@ -4,7 +4,7 @@ Système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour les
 enfants : simplicité, autonomie et initiation à l'informatique.
 
 Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/latest)
-(ISO ~2 Go, vérifiable avec `SHA256SUMS.txt`)
+(ISO ~1,9 Gio, vérifiable avec `SHA256SUMS.txt`)
 
 ![Écran de démarrage](screenshots/default_boot_splash.png)
 
@@ -100,8 +100,9 @@ passe admin ; inactif sur le live (connexion automatique).
   NM-wait-online masqués (hook 0510).
 - Squashfs zstd niveau 22, menu GRUB UEFI à 3 s (hook 0520), `GRUB_TIMEOUT = 1`
   une fois installé.
-- ISO allégée : firmwares utiles seulement, caches apt-file/xapian/plocate non
-  construits, paquets et traductions superflus purgés (hook 0540).
+- ISO allégée (hook 0540) : agent polkit léger (lxpolkit) sans la chaîne
+  OpenCV/GDAL, variantes de thèmes/curseurs et traductions superflues purgées,
+  caches apt-file/xapian/plocate non construits.
 
 ## Structure du projet
 
@@ -113,7 +114,7 @@ passe admin ; inactif sur le live (connexion automatique).
 | `config/hooks/normal/0510-kids-performance.hook.chroot` | zram, earlyoom, couvre-feu ; services inutiles masqués |
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
 | `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf |
-| `config/hooks/normal/0540-kids-slim.hook.chroot` | Allège l'image (Recommends superflus, traductions fr/en/C) |
+| `config/hooks/normal/0540-kids-slim.hook.chroot` | Allège l'image (agent polkit léger, thèmes/curseurs et traductions superflus) |
 | `config/hooks/normal/0550-plymouth-theme.hook.chroot` | Embarque le thème Plymouth dans l'initramfs |
 | `config/includes.chroot_after_packages/` | DNS, politiques/marque-pages/thème Firefox, Plymouth, dconf, skel XFCE, fond d'écran |
 | `build.sh` / `clean.sh` / `run-qemu.sh` | Scripts pratiques (build, nettoyage, test QEMU avec son) |

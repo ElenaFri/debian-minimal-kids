@@ -5,6 +5,7 @@ dbus-x11
 lightdm
 lightdm-gtk-greeter
 network-manager-gnome
+lxpolkit
 pipewire-audio
 wireplumber
 xfce4-pulseaudio-plugin
