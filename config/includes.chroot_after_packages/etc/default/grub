@@ -1,0 +1,16 @@
+# /etc/default/grub du SYSTÈME INSTALLÉ (copié depuis le squashfs par Calamares).
+#
+# Les paquets grub « -bin » (sans le méta-paquet grub-pc/grub-efi-amd64) ne
+# créent pas ce fichier ; on le fournit donc nous-mêmes. À l'installation, le
+# module « grubcfg » de Calamares le relit (overwrite=false) : il conserve ces
+# valeurs, ajoute automatiquement « splash » (Plymouth présent) et règle
+# GRUB_DISTRIBUTOR sur « Kiddux » (bootloaderEntryName du branding).
+#
+# Sans effet sur le LIVE : l'ISO a son propre menu GRUB (étape binaire), et
+# aucun paquet grub ici ne déclenche update-grub pendant la construction.
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=1
+GRUB_DISTRIBUTOR="Kiddux"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_CMDLINE_LINUX=""

@@ -1,0 +1,45 @@
+---
+# Branding Calamares pour Kiddux (surcharge le branding « debian » fourni par
+# calamares-settings-debian ; settings.conf pointe déjà « branding: debian »).
+# productLogo/productIcon = l'icône du projet (debian-logo.png = icon.png 256px).
+componentName:   debian
+welcomeStyleCalamares: true
+windowExpanding: normal
+windowSize: 800px,580px
+windowPlacement: center
+
+strings:
+    productName:         Kiddux
+    shortProductName:    Kiddux
+    version:             13
+    shortVersion:        13
+    versionedName:       Kiddux
+    shortVersionedName:  Kiddux
+    bootloaderEntryName: Kiddux
+    productUrl:          https://github.com/ElenaFri/debian-minimal-kids
+    supportUrl:          https://github.com/ElenaFri/debian-minimal-kids/issues
+    knownIssuesUrl:      https://github.com/ElenaFri/debian-minimal-kids/issues
+    releaseNotesUrl:     https://github.com/ElenaFri/debian-minimal-kids/releases
+    donateUrl:           https://github.com/ElenaFri/debian-minimal-kids
+
+sidebar: widget
+navigation: widget
+
+images:
+    productLogo:         "debian-logo.png"
+    productIcon:         "debian-logo.png"
+    # Fond écru chaud (#f2e8d6) sur toutes les pages, assorti au magenta Kiddux ;
+    # texte sombre bien lisible par-dessus. Pas d'icône incrustée (elle chevauchait
+    # le texte). La marque reste visible via productLogo (haut de la colonne d'étapes).
+    productWallpaper:    "wallpaper.png"
+
+slideshow:               "show.qml"
+
+style:
+   # Barre latérale prune/magenta, assortie au thème Yaru-magenta et à l'icône.
+   SidebarBackground:    "#6e1b4b"
+   SidebarText:          "#FFFFFF"
+   SidebarTextCurrent:   "#FFFFFF"
+   SidebarBackgroundCurrent: "#a82e73"
+
+slideshowAPI: 2

@@ -2,6 +2,8 @@ xorg
 xfce4
 xfce4-screensaver
 dbus-x11
+# Requis par l'icône « Installer Kiddux » (Calamares l'ajoute via « xdg-user-dir »).
+xdg-user-dirs
 lightdm
 lightdm-gtk-greeter
 network-manager-gnome

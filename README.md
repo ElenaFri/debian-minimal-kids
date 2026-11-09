@@ -20,7 +20,8 @@ Jeux : Extreme Tux Racer, Luanti, Atomix, 2048, Swell Foop.
 ## Compatibilité
 
 - PC 64 bits (amd64), BIOS ou UEFI avec Secure Boot ; ~2 Gio de RAM.
-- Démarrage clé USB (image hybride) ou DVD. Essayer le mode live avant d'installer.
+- Démarrage clé USB (image hybride) ou DVD. Essayer le mode live avant
+  d'installer ; installation permanente via l'icône « Installer Kiddux » (Calamares).
 - Non pris en charge : 32 bits, ARM (Raspberry Pi, Mac Apple Silicon) ; le WiFi
   Broadcom et le matériel très récent peuvent manquer de pilote.
 - Test sans risque : machine virtuelle (voir `run-qemu.sh`).
@@ -65,7 +66,7 @@ installé.
   2026, 22h 29 » épinglées à droite.
 - Dock vertical à gauche : Firefox, Gedit, Dessin, VLC, Thunar.
 - Thème Yaru-magenta (GTK, icônes, bordures), pointeur ComixCursors-Orange,
-  bureau sans icônes.
+  bureau épuré (seule l'icône « Installer Kiddux » sur le live).
 - Fond d'écran « chat endormi à la bougie » en mode zoom : remplit l'écran à
   toute résolution, sans déformation.
 - Splash Plymouth « kids » : icône sur tuile magenta, « debian 13 » en
@@ -121,8 +122,8 @@ passe admin ; inactif sur le live (connexion automatique).
 | Chemin | Rôle |
 |--------|------|
 | `auto/config` | Options `lb config` figées |
-| `config/package-lists/*.list.chroot` | Paquets : live, locale FR, bureau, applications, jeux, installateur |
-| `config/includes.installer/preseed.cfg` | Installateur en français |
+| `config/package-lists/*.list.chroot` | Paquets : live, locale FR, bureau, applications, jeux, installateur Calamares |
+| `config/includes.chroot_after_packages/etc/calamares/` | Branding Kiddux et réglages de l'installateur Calamares |
 | `config/hooks/normal/0510-kids-performance.hook.chroot` | zram, earlyoom, couvre-feu ; services inutiles masqués |
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |
 | `config/hooks/normal/0530-dconf-defaults.hook.chroot` | Compile les défauts dconf |
@@ -139,4 +140,6 @@ passe admin ; inactif sur le live (connexion automatique).
 | Fuseau | `Europe/Paris` |
 | Utilisateur / machine | `lisa` / `kids-pc` |
 
-Définis dans `auto/config` ; installateur préconfiguré en français (`preseed.cfg`).
+Définis dans `auto/config`. Installation sur disque via Calamares (icône
+« Installer Kiddux » sur le bureau du live) ; le système installé hérite du
+français, du clavier AZERTY et du splash Plymouth.

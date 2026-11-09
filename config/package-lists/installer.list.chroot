@@ -1,1 +1,13 @@
-debian-installer-launcher
+# Installateur sur disque : Calamares (lancé depuis la session live).
+# calamares-settings-debian fournit tout le câblage Debian Live (modules,
+# icône de bureau posée à l'ouverture de session, auto-purge de la cible).
+calamares
+calamares-settings-debian
+
+# GRUB pour que Calamares installe l'amorceur sur le disque cible.
+# Calamares ne tire PAS grub ; les variantes « -bin » (modules i386-pc ET
+# x86_64-efi) cohabitent et couvrent l'installation BIOS comme UEFI.
+grub2-common
+grub-pc-bin
+grub-efi-amd64-bin
+efibootmgr

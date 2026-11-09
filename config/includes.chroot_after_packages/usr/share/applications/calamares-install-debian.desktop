@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Installer Kiddux
+Name[fr]=Installer Kiddux
+Name[en]=Install Kiddux
+GenericName=Installateur Calamares
+GenericName[en]=Calamares Installer
+Comment=Installer Kiddux de manière permanente sur le disque dur
+Comment[en]=Install Kiddux permanently to your hard disk
+Exec=calamares-install-debian
+Keywords=calamares;system;install;installer;kiddux;debian;
+Keywords[fr]=calamares;système;installer;installateur;kiddux;debian;
+Icon=install-debian
+Terminal=false
+Categories=Qt;System;
+StartupWMClass=calamares
+StartupNotify=true
