@@ -1,0 +1,26 @@
+#!/bin/sh
+# 1030-kids-locale-fr — locale par défaut du système = français.
+#
+# Le hook par défaut de live-build 1020-create-locales-files fige
+# « LANG=C.UTF-8 » dans /etc/default/locale. Sur le LIVE, live-config le
+# corrige au démarrage (live-config.locales=fr_FR.UTF-8), donc le live est en
+# français. Mais le système INSTALLÉ (copie du squashfs via
+# « --debian-installer live ») n'exécute PAS live-config : il hérite du
+# C.UTF-8 et se retrouve en anglais.
+#
+# Ce hook s'exécute APRÈS 1020 (numéro supérieur) : il réécrit la locale en
+# fr_FR.UTF-8 et la génère, pour que le système installé soit en français.
+# (C.UTF-8 reste disponible comme repli intégré ; inutile de générer en_US.)
+
+set -e
+
+# S'assurer que fr_FR.UTF-8 est listée puis générée.
+touch /etc/locale.gen
+sed -i 's/^# *\(fr_FR.UTF-8 UTF-8\)/\1/' /etc/locale.gen
+grep -q '^fr_FR.UTF-8 UTF-8' /etc/locale.gen || echo 'fr_FR.UTF-8 UTF-8' >>/etc/locale.gen
+
+if command -v locale-gen >/dev/null 2>&1; then
+    locale-gen
+fi
+
+echo "LANG=fr_FR.UTF-8" >/etc/default/locale

@@ -1,0 +1,14 @@
+# Disposition clavier par défaut : français (AZERTY, variante latin9).
+#
+# Sur le LIVE, live-config réécrit ce fichier au démarrage à partir du paramètre
+# de boot live-config.keyboard-layouts=fr : le live est toujours en AZERTY.
+#
+# Sur le système INSTALLÉ (copie du squashfs via « --debian-installer live »),
+# live-config ne s'exécute pas : ce fichier garantit alors un clavier français
+# par défaut, de la même façon que le hook 1020 garantit une locale française.
+XKBMODEL="pc105"
+XKBLAYOUT="fr"
+XKBVARIANT="latin9"
+XKBOPTIONS=""
+
+BACKSPACE="guess"

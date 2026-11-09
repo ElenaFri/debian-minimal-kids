@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Installer Kiddux
+Name[en]=Install Kiddux
+Comment=Installer Kiddux de manière permanente sur le disque dur
+Comment[en]=Install Kiddux permanently to your hard disk
+Exec=su-to-root -X -c /usr/sbin/debian-installer-launcher
+Icon=debian-installer-launcher
+Type=Application
+Categories=System;
+StartupNotify=true
+Terminal=true

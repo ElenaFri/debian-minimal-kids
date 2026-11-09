@@ -1,4 +1,4 @@
-# debian-minimal-kids
+# Kiddux
 
 Système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour les
 enfants : simplicité, autonomie et initiation à l'informatique.
@@ -121,7 +121,7 @@ passe admin ; inactif sur le live (connexion automatique).
 | Chemin | Rôle |
 |--------|------|
 | `auto/config` | Options `lb config` figées |
-| `config/package-lists/*.list.chroot` | Paquets : live, locale FR, bureau, applications, jeux |
+| `config/package-lists/*.list.chroot` | Paquets : live, locale FR, bureau, applications, jeux, installateur |
 | `config/includes.installer/preseed.cfg` | Installateur en français |
 | `config/hooks/normal/0510-kids-performance.hook.chroot` | zram, earlyoom, couvre-feu ; services inutiles masqués |
 | `config/hooks/normal/0520-grub-timeout.binary` | Menu GRUB UEFI : 3 s |

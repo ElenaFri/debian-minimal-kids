@@ -1,0 +1,9 @@
+#!/bin/sh
+# kids-trust-launcher — rend le lanceur d'installation exécutable à l'ouverture
+# de session, pour que xfdesktop le considère comme fiable et ne demande pas de
+# confirmation à chaque démarrage du live.
+#
+# Nécessaire car la copie de /etc/skel vers le profil de l'utilisateur (par
+# user-setup au démarrage du live) ne préserve pas toujours le bit exécutable,
+# ce qui déclenche l'avertissement « ce lanceur n'est pas fiable » de XFCE.
+chmod +x "$HOME/Desktop/debian-installer-launcher.desktop" 2>/dev/null || true

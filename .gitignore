@@ -39,6 +39,7 @@ config/hooks/normal/*
 !config/hooks/normal/0530-dconf-defaults.hook.chroot
 !config/hooks/normal/0540-kids-slim.hook.chroot
 !config/hooks/normal/0550-plymouth-theme.hook.chroot
+!config/hooks/normal/1030-kids-locale-fr.hook.chroot
 
 # Downloaded packages and generated filesystem
 cache/
