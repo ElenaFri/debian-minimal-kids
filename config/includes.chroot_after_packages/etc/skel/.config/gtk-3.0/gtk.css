@@ -36,3 +36,23 @@
 .xfce4-panel button:active {
     background-color: rgba(255, 255, 255, 0.18);
 }
+
+/* Les menus déroulants et infobulles ouverts DEPUIS le panneau (menu
+ * Applications, menu du volume, calendrier de l'horloge...) héritent du
+ * contexte "xfce4-panel" et donc du texte blanc ci-dessus. Or ils s'affichent
+ * sur le fond clair du thème Yaru : on y rétablit les couleurs du thème pour
+ * qu'ils redeviennent lisibles. L'élément survolé garde le texte clair du
+ * thème (posé sur la surbrillance magenta de Yaru). */
+.xfce4-panel menu,
+.xfce4-panel menu menuitem label,
+.xfce4-panel menu label,
+.xfce4-panel tooltip,
+.xfce4-panel tooltip label {
+    color: @theme_fg_color;
+    text-shadow: none;
+}
+
+.xfce4-panel menu menuitem:hover label,
+.xfce4-panel menu menuitem:selected label {
+    color: @theme_selected_fg_color;
+}
