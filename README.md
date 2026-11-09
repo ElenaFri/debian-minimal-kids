@@ -5,6 +5,9 @@ enfants : simplicité, autonomie et initiation à l'informatique.
 
 Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/latest)
 (ISO ~1,85 Gio, vérifiable avec `SHA256SUMS.txt`)
+Il est à noter que la chrysalide est encore en pleine transformation vers le papillon, même si les mécanismes de base ont été implémentés.
+
+Plus d'informations ce qui est à venir sur ma [« TODO list »](TODO.md). Vos retours sont précieux !
 
 ![Écran de démarrage](screenshots/default_boot_splash.png)
 
