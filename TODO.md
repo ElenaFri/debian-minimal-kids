@@ -8,7 +8,8 @@
 - [x] Vérifier et corriger la connexion wifi
 - [ ] Rendre le fond d'écran scalable (remplacer une seule image qui s'étire ou rétrécit)
 - [ ] Dans une même logique, fournir toutes les résolutions du splash
-- [ ] Vérifier et corriger au besoin le fonctionnement du son / vidéo / capture
+- [ ] Remplacer l'apparence standard du GRUB Debian
+- [x] Vérifier et corriger au besoin le fonctionnement du son / vidéo / capture
 - [x] Rendre Qwant l'unique moteur de recherche disponible
 - [x] Renforcer la protection contre les contacts non-sollicités
 - [x] Renforcer le couvre-feu

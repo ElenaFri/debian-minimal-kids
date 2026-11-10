@@ -4,7 +4,7 @@ Système GNU/Linux minimaliste basé sur Debian 13 « trixie », pensé pour les
 enfants : simplicité, autonomie et initiation à l'informatique.
 
 Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/latest)
-(ISO ~2,06 Gio, vérifiable avec `SHA256SUMS.txt`)
+(ISO ~1,46 Gio, vérifiable avec `SHA256SUMS.txt`)
 Il est à noter que la chrysalide est encore en pleine transformation vers le papillon, même si les mécanismes de base ont été implémentés.
 
 Plus d'informations sur ce qui est à venir dans ma [« TODO list »](TODO.md). Vos retours sont précieux !

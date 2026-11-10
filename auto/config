@@ -12,12 +12,17 @@
 
 set -e
 
+# Pas de Debian-Installer : l'installation se fait via Calamares (icône du
+# bureau live), qui clone le squashfs. Embarquer le d-i ajouterait ~520 Mo
+# inutiles (noyaux/initrd du d-i + pool .deb hors-ligne) ; d'où --debian-installer
+# none.
 lb config noauto \
     --mode debian \
     --distribution trixie \
     --architectures amd64 \
     --archive-areas "main contrib non-free non-free-firmware" \
     --firmware-chroot false \
+    --debian-installer none \
     --chroot-squashfs-compression-type zstd \
     --chroot-squashfs-compression-level 22 \
     --bootappend-live "boot=live components quiet splash live-config.username=lisa live-config.user-fullname=Lisa live-config.hostname=kids-pc live-config.locales=fr_FR.UTF-8 live-config.keyboard-layouts=fr live-config.timezone=Europe/Paris" \
