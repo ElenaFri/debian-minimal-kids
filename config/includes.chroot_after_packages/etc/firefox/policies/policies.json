@@ -32,7 +32,20 @@
           "Method": "GET"
         }
       ],
-      "Default": "Qwant Junior"
+      "Default": "Qwant Junior",
+      "Remove": [
+        "Google",
+        "Bing",
+        "DuckDuckGo",
+        "eBay",
+        "Amazon.fr",
+        "Amazon.com",
+        "Qwant",
+        "Wikipédia (fr)",
+        "Wikipedia (fr)",
+        "Wikipedia (en)"
+      ],
+      "PreventInstalls": true
     },
 
     "DisableTelemetry": true,
