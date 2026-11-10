@@ -10,6 +10,10 @@
 # 1. Dépendances parasites et applications superflues :
 #    - pocketsphinx-en-us : modèles vocaux *anglais* (via gstreamer-plugins-bad)
 #    - mesa-vulkan-drivers : rien chez nous n'utilise Vulkan, OpenGL suffit
+#    - zutty : apt l'avait choisi pour fournir « x-terminal-emulator », mais il
+#      exige OpenGL ES 3.1 et refuse de démarrer sans (fréquent en VM) → terminal
+#      inutilisable. Remplacé par xfce4-terminal (VTE, marche partout) ; après la
+#      purge, update-alternatives bascule seul sur xfce4-terminal.
 #    - ukui-polkit : apt l'avait choisi pour fournir « polkit-1-auth-agent »
 #      (réclamé par Thunar et network-manager), mais il tire tout OpenCV +
 #      GDAL + PROJ + Qt-polkit (~100 Mio). Remplacé par lxpolkit (léger).
@@ -27,7 +31,7 @@
 set -e
 
 # --- 1. Dépendances parasites et applications superflues ---------------------
-apt-get -y purge pocketsphinx-en-us mesa-vulkan-drivers
+apt-get -y purge pocketsphinx-en-us mesa-vulkan-drivers zutty
 
 # lxpolkit remplace ukui-polkit ; qpdfview remplace atril (donc yelp, dernier
 # utilisateur de WebKitGTK, devient superflu). On purge, puis autoremove nettoie

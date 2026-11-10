@@ -3,7 +3,7 @@
 - [x] Corriger l'apparence des menus contextuels & autre infobulles (blanc sur blanc, illisible)
 - [x] Vérifier et corriger l'installeur (remplacé par Calamares)
 - [x] Vérifier et corriger le bug de disposition de clavier dnas le système installé
-- [ ] Vérifier et corriger zutty
+- [x] Vérifier et corriger zutty (remplacé par Xfce-terminal)
 - [x] Ajouter un installeur sur le bureau du live
 - [ ] Rendre le fond d'écran scalable (remplacer une seule image qui s'étire ou rétrécit)
 - [ ] Dans une même logique, fournir toutes les résolutions du splash
