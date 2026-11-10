@@ -6,8 +6,8 @@
 #
 # - zramswap + earlyoom : services activés dès le premier démarrage
 #   (idempotent : sans effet s'ils le sont déjà).
-# - Couvre-feu : le timer kids-bedtime suspend la machine à 21h30 ;
-#   xfce4-screensaver verrouille l'écran au réveil (cf. skel xfconf).
+# - Couvre-feu : le timer kids-bedtime met la machine en veille répétée de
+#   21h30 à 7h00 ; xfce4-screensaver verrouille l'écran au réveil (cf. skel xfconf).
 # - ModemManager masqué : installé via les « Recommends » de NetworkManager,
 #   il sonde périodiquement du matériel (modem 3G/4G) absent de la machine
 #   cible. Le masquer économise ~10 Mo de RAM et des réveils CPU, sans

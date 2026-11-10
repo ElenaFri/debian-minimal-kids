@@ -10,7 +10,7 @@
 - [ ] Vérifier et corriger au besoin le fonctionnement du son / vidéo / capture
 - [x] Rendre Qwant l'unique moteur de recherche disponible
 - [x] Renforcer la protection contre les contacts non-sollicités
-- [ ] Renforcer le couvre-feu
+- [x] Renforcer le couvre-feu
 
 ## Décisions plus globales à prendre
 

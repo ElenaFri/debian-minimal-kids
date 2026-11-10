@@ -1,13 +1,18 @@
 [Unit]
-Description=Couvre-feu debian-minimal-kids (extinction 21h30)
+Description=Couvre-feu debian-minimal-kids (veille répétée 21h30–07h00)
 Documentation=file:///usr/share/doc/debian-minimal-kids/README.md
 
 [Timer]
-# Tous les jours à 21h30.
-OnCalendar=*-*-* 21:30:00
-# Persistent=false (volontaire) : si la machine démarre après 21h30,
-# elle ne s'endort pas immédiatement — le couvre-feu reprend le lendemain.
-# Évite qu'un parent testant l'image le soir croie qu'elle est cassée.
+# Fenêtre de couvre-feu : toutes les minutes de 21h30 à 06h59 inclus (donc
+# ordinateur libre à partir de 7h00). Si l'enfant réveille la machine pendant
+# cette plage, le prochain tic la remet en veille dans la minute → inutilisable.
+# Hors de la plage, le timer ne se déclenche jamais.
+OnCalendar=*-*-* 21:30..59:00
+OnCalendar=*-*-* 22,23,00..06:*:00
+# Pas de WakeSystem (défaut) : une machine endormie n'est jamais réveillée par
+# le timer ; il ne réévalue qu'au retour de veille, d'où la re-mise en veille.
+# Persistent=false : aucun rattrapage des tics manqués pendant la veille
+# (inutile — le tic de la minute suivante s'en charge).
 Persistent=false
 
 [Install]

@@ -7,7 +7,7 @@ Télécharger [ici](https://github.com/ElenaFri/debian-minimal-kids/releases/lat
 (ISO ~1,85 Gio, vérifiable avec `SHA256SUMS.txt`)
 Il est à noter que la chrysalide est encore en pleine transformation vers le papillon, même si les mécanismes de base ont été implémentés.
 
-Plus d'informations ce qui est à venir sur ma [« TODO list »](TODO.md). Vos retours sont précieux !
+Plus d'informations sur ce qui est à venir dans ma [« TODO list »](TODO.md). Vos retours sont précieux !
 
 ![Écran de démarrage](screenshots/default_boot_splash.png)
 
@@ -101,13 +101,14 @@ Configuré par `policies.json` (politiques) et `distribution.ini` (marque-pages)
 2. Firefox verrouillé : réseaux sociaux et sites de chat avec inconnus bloqués
    (`WebsiteFilter`), ajout d'extensions interdit, DoH et `about:config`
    désactivés, navigation privée coupée (historique consultable).
-3. Couvre-feu : suspension à 21h30 (`kids-bedtime.*`, hook 0510) ; au réveil la
-   session se verrouille.
+3. Couvre-feu : veille répétée de 21h30 à 7h00 (`kids-bedtime.*`, hook 0510).
+   Réveiller la machine pendant cette plage la rendort dans la minute, la
+   rendant inutilisable ; l'écran se verrouille à chaque réveil.
 
-Régler l'heure : `OnCalendar` du timer, puis `sudo systemctl daemon-reload &&
-sudo systemctl restart kids-bedtime.timer`. Désactiver :
-`sudo systemctl disable --now kids-bedtime.timer`. Contournable avec le mot de
-passe admin ; inactif sur le live (connexion automatique).
+Régler la plage : lignes `OnCalendar` du timer, puis `sudo systemctl
+daemon-reload && sudo systemctl restart kids-bedtime.timer`. Désactiver (droits
+admin) : `sudo systemctl disable --now kids-bedtime.timer`. Actif aussi sur le
+live : pour tester le soir, désactive-le d'abord.
 
 ## Optimisations
 
