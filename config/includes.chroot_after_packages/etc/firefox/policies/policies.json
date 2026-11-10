@@ -7,6 +7,36 @@
     "BlockAboutConfig": true,
     "DisablePrivateBrowsing": true,
     "DisableProfileImport": true,
+    "InstallAddonsPermission": {
+      "Default": false
+    },
+
+    "WebsiteFilter": {
+      "Block": [
+        "*://*.omegle.com/*",
+        "*://*.chatroulette.com/*",
+        "*://*.ome.tv/*",
+        "*://*.emeraldchat.com/*",
+        "*://*.monkey.app/*",
+        "*://*.discord.com/*",
+        "*://*.discordapp.com/*",
+        "*://*.instagram.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.snapchat.com/*",
+        "*://*.facebook.com/*",
+        "*://*.messenger.com/*",
+        "*://*.twitter.com/*",
+        "*://*.x.com/*",
+        "*://*.reddit.com/*",
+        "*://*.twitch.tv/*",
+        "*://*.roblox.com/*",
+        "*://*.kik.com/*",
+        "*://web.telegram.org/*",
+        "*://*.telegram.org/*",
+        "*://web.whatsapp.com/*",
+        "*://*.whatsapp.com/*"
+      ]
+    },
 
     "NoDefaultBookmarks": true,
     "Homepage": {

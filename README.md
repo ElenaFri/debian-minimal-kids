@@ -84,7 +84,7 @@ le rangeant sous une clé liée au connecteur du moniteur.
 
 Configuré par `policies.json` (politiques) et `distribution.ini` (marque-pages).
 
-- Marque-pages sur la barre personnelle : dossiers Vidéos (YouTube, Disney+) et
+- Marque-pages sur la barre personnelle : dossiers Vidéos (YouTube Kids, Disney+) et
   École (Khan Academy, Lumni, Scratch, 1jour1actu), Wikipédia en direct. Page
   d'accueil : Lumni.
 - Moteur : Qwant Junior (verrouillé). Assistant IA : Le Chat Mistral.
@@ -94,10 +94,13 @@ Configuré par `policies.json` (politiques) et `distribution.ini` (marque-pages)
 
 ## Contrôle parental
 
-1. DNS familial : tout passe par OpenDNS FamilyShield (`99-kids-dns.conf`) ;
-   DNS du DHCP ignorés, pas de contournement.
-2. Firefox verrouillé : DoH et `about:config` désactivés, navigation privée
-   coupée (historique consultable).
+1. DNS familial : un dnsmasq local force SafeSearch et le « Mode restreint »
+   YouTube (commentaires et chat en direct masqués), puis transfère à OpenDNS
+   FamilyShield (`99-kids-dns.conf`, `00-safe-search.conf`) ; DNS du DHCP
+   ignorés, pas de contournement.
+2. Firefox verrouillé : réseaux sociaux et sites de chat avec inconnus bloqués
+   (`WebsiteFilter`), ajout d'extensions interdit, DoH et `about:config`
+   désactivés, navigation privée coupée (historique consultable).
 3. Couvre-feu : suspension à 21h30 (`kids-bedtime.*`, hook 0510) ; au réveil la
    session se verrouille.
 

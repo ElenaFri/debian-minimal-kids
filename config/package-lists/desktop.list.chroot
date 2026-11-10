@@ -8,6 +8,9 @@ xdg-user-dirs
 lightdm
 lightdm-gtk-greeter
 network-manager-gnome
+# Résolveur DNS local (plugin dnsmasq de NetworkManager) : force SafeSearch et le
+# « Mode restreint » YouTube par réécriture CNAME (voir dnsmasq.d/00-safe-search).
+dnsmasq-base
 lxpolkit
 pipewire-audio
 wireplumber
