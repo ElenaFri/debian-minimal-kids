@@ -22,8 +22,9 @@ Jeux : Extreme Tux Racer, Luanti, Atomix, 2048, Swell Foop.
 - PC 64 bits (amd64), BIOS ou UEFI avec Secure Boot ; ~2 Gio de RAM.
 - Démarrage clé USB (image hybride) ou DVD. Essayer le mode live avant
   d'installer ; installation permanente via l'icône « Installer Kiddux » (Calamares).
-- Non pris en charge : 32 bits, ARM (Raspberry Pi, Mac Apple Silicon) ; le WiFi
-  Broadcom et le matériel très récent peuvent manquer de pilote.
+- Non pris en charge : 32 bits, ARM (Raspberry Pi, Mac Apple Silicon) ; le
+  matériel très récent et les anciennes puces WiFi Broadcom (b43) peuvent
+  manquer de pilote.
 - Test sans risque : machine virtuelle (voir `run-qemu.sh`).
 
 ## Construire

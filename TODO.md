@@ -5,6 +5,7 @@
 - [x] Vérifier et corriger le bug de disposition de clavier dnas le système installé
 - [x] Vérifier et corriger zutty (remplacé par Xfce-terminal)
 - [x] Ajouter un installeur sur le bureau du live
+- [x] Vérifier et corriger la connexion wifi
 - [ ] Rendre le fond d'écran scalable (remplacer une seule image qui s'étire ou rétrécit)
 - [ ] Dans une même logique, fournir toutes les résolutions du splash
 - [ ] Vérifier et corriger au besoin le fonctionnement du son / vidéo / capture

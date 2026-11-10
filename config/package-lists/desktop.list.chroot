@@ -27,6 +27,8 @@ firmware-intel-graphics
 firmware-iwlwifi
 firmware-realtek
 firmware-atheros
+firmware-mediatek
+firmware-brcm80211
 firmware-intel-sound
 firmware-sof-signed
 bluez-firmware
