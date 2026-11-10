@@ -11,6 +11,9 @@ network-manager-gnome
 # Résolveur DNS local (plugin dnsmasq de NetworkManager) : force SafeSearch et le
 # « Mode restreint » YouTube par réécriture CNAME (voir dnsmasq.d/00-safe-search).
 dnsmasq-base
+# WiFi WPA/WPA2 : network-manager ne « recommande » wpasupplicant que ; explicité
+# pour garantir la connexion au wifi domestique sur le matériel réel.
+wpasupplicant
 lxpolkit
 pipewire-audio
 wireplumber
@@ -29,6 +32,7 @@ firmware-realtek
 firmware-atheros
 firmware-mediatek
 firmware-brcm80211
+firmware-misc-nonfree
 firmware-intel-sound
 firmware-sof-signed
 bluez-firmware

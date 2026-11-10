@@ -105,11 +105,17 @@ Configuré par `policies.json` (politiques) et `distribution.ini` (marque-pages)
 3. Couvre-feu : veille répétée de 21h30 à 7h00 (`kids-bedtime.*`, hook 0510).
    Réveiller la machine pendant cette plage la rendort dans la minute, la
    rendant inutilisable ; l'écran se verrouille à chaque réveil.
+4. Comptes (système installé) : l'enfant a un compte sans droits
+   d'administration (hors du groupe `sudo`) ; un mot de passe root distinct,
+   choisi par le parent à l'installation, sert à administrer. L'enfant ne peut
+   donc pas lever les protections ci-dessus. Le live n'est pas concerné.
 
-Régler la plage : lignes `OnCalendar` du timer, puis `sudo systemctl
-daemon-reload && sudo systemctl restart kids-bedtime.timer`. Désactiver (droits
-admin) : `sudo systemctl disable --now kids-bedtime.timer`. Actif aussi sur le
-live : pour tester le soir, désactive-le d'abord.
+Régler la plage : lignes `OnCalendar` du timer, puis `systemctl daemon-reload &&
+systemctl restart kids-bedtime.timer`. Désactiver : `systemctl disable --now
+kids-bedtime.timer`. Sur le système installé, lancer ces commandes en root
+(`su -`, mot de passe du parent) ; sur le live, les préfixer de `sudo`. Le
+couvre-feu est aussi actif sur le live : pour tester le soir, désactive-le
+d'abord.
 
 ## Optimisations
 
