@@ -1,11 +1,12 @@
-# Disposition clavier par défaut : français (AZERTY, variante latin9).
+# Disposition clavier de la CONSOLE : français (AZERTY, variante latin9).
 #
-# Sur le LIVE, live-config réécrit ce fichier au démarrage à partir du paramètre
-# de boot live-config.keyboard-layouts=fr : le live est toujours en AZERTY.
+# ATTENTION : ce fichier ne pilote que la console (console-setup). Le serveur X
+# (session XFCE + installateur Calamares) lit, lui, /etc/X11/xorg.conf.d/00-keyboard.conf
+# — voir ce fichier pour la disposition graphique. Les deux sont gardés cohérents
+# (fr/latin9/pc105).
 #
-# Sur le système INSTALLÉ, Calamares copie le squashfs et son module clavier
-# hérite de la disposition du live (AZERTY) ; ce fichier fixe ce défaut français,
-# de la même façon que le hook 1030 garantit une locale française.
+# Sur le système INSTALLÉ, Calamares copie le squashfs et hérite de ces deux
+# fichiers ; son module clavier détecte alors « fr » et l'écrit sur la cible.
 XKBMODEL="pc105"
 XKBLAYOUT="fr"
 XKBVARIANT="latin9"
